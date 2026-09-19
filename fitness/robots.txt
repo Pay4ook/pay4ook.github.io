@@ -1,0 +1,4 @@
+﻿User-agent: *
+Allow: /
+
+Sitemap: https://ironfit-pay4ook.netlify.app/sitemap.xml
