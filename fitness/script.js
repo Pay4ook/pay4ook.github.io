@@ -194,3 +194,28 @@ document.getElementById("pm-exp").addEventListener("input", function (e) {
 document.addEventListener("keydown", function (e) {
   if (e.key === "Escape") { closePayment(); closeSuccess(); }
 });
+
+
+/* Mobile burger */
+(function () {
+  var btn = document.getElementById("burgerBtn");
+  var nav = document.getElementById("mNav");
+  var ov = document.getElementById("mOverlay");
+  if (!btn || !nav) return;
+  function close() {
+    btn.classList.remove("active");
+    nav.classList.remove("open");
+    ov.classList.remove("open");
+    btn.setAttribute("aria-expanded", "false");
+  }
+  btn.addEventListener("click", function () {
+    var open = nav.classList.toggle("open");
+    btn.classList.toggle("active", open);
+    ov.classList.toggle("open", open);
+    btn.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+  ov.addEventListener("click", close);
+  nav.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") close();
+  });
+})();
