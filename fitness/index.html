@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IronFit — фитнес-клуб и запись на тренировки</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="container header-inner">
+    <a href="#top" class="logo"><span class="logo-mark">🏋️</span> Iron<strong>Fit</strong></a>
+    <nav class="nav">
+      <a href="#programs">Программы</a>
+      <a href="#schedule">Расписание</a>
+      <a href="#trainers">Тренеры</a>
+      <a href="#pricing">Цены</a>
+    </nav>
+    <a href="#booking" class="btn btn-accent btn-sm">Записаться</a>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="container">
+    <div class="hero-content">
+      <span class="badge">Фитнес-клуб премиум-класса</span>
+      <h1>Твоё тело твоих мечтаний <span class="accent-text">начинается здесь</span></h1>
+      <p>Персональные программы, групповые тренировки, современный зал <b>1600 м²</b> и команда тренеров с опытом от 8 лет. Запишись на бесплатную пробную тренировку.</p>
+      <div class="hero-actions">
+        <a href="#booking" class="btn btn-accent">Записаться на тренировку</a>
+        <a href="#schedule" class="btn btn-ghost">Смотреть расписание</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>1600<span>м²</span></strong><p>площадь зала</p></div>
+        <div><strong>12</strong><p>тренеров</p></div>
+        <div><strong>40+</strong><p>групповых занятий в неделю</p></div>
+        <div><strong>7:00</strong><p>работаем каждый день</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="container">
+    <div class="feature-grid">
+      <div class="feature">
+        <div class="feature-icon">💪</div>
+        <h3>Силовой зал</h3>
+        <p>Свободные веса, тренажёры Hammer Strength, силовая рама и зона кроссфита.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🔥</div>
+        <h3>Групповые программы</h3>
+        <p>HIIT, функционалка, зумба, йога, стретчинг и интервальные тренировки каждый день.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">🥗</div>
+        <h3>Фитнес-бар</h3>
+        <p>Спортивное питание, протеиновые коктейли и правильные снеки после тренировки.</p>
+      </div>
+      <div class="feature">
+        <div class="feature-icon">📊</div>
+        <h3>Индивидуальные планы</h3>
+        <p>Персональный тренер составит программу питания и тренировок под твою цель.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="programs" id="programs">
+  <div class="container">
+    <div class="section-head">
+      <h2>Наши программы</h2>
+      <p>Выбери направление и запишись на занятие — первая тренировка бесплатно.</p>
+    </div>
+    <div class="program-grid">
+      <div class="program-card">
+        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=800&auto=format&fit=crop" alt="Силовая тренировка">
+        <div class="program-body">
+          <div class="program-tag">Силовые</div>
+          <h3>Силовая тренировка</h3>
+          <p>Проработка всех групп мышц с прогрессией нагрузки. Подходит для новичков и опытных.</p>
+          <div class="program-meta"><span>⏱ 60 мин</span><span>🔥 интенсивно</span></div>
+        </div>
+      </div>
+      <div class="program-card">
+        <img src="https://images.unsplash.com/photo-1571902943202-507ec2618e8f?q=80&w=800&auto=format&fit=crop" alt="HIIT тренировка">
+        <div class="program-body">
+          <div class="program-tag accent">HIIT</div>
+          <h3>Интервальная (HIIT)</h3>
+          <p>Сжигай до 800 ккал за занятие. Чередование мощных интервалов и короткого отдыха.</p>
+          <div class="program-meta"><span>⏱ 45 мин</span><span>💧 супер интенсивно</span></div>
+        </div>
+      </div>
+      <div class="program-card">
+        <img src="https://images.unsplash.com/photo-1549060279-7e168fcee0c2?q=80&w=800&auto=format&fit=crop" alt="Бокс">
+        <div class="program-body">
+          <div class="program-tag">Единоборства</div>
+          <h3>Бокс и ММА</h3>
+          <p>Ударная техника, работа в парах, выносливость и спарринги под контролем тренера.</p>
+          <div class="program-meta"><span>⏱ 90 мин</span><span>🥊 для всех</span></div>
+        </div>
+      </div>
+      <div class="program-card">
+        <img src="https://images.unsplash.com/photo-1599447421416-3414500d18a5?q=80&w=800&auto=format&fit=crop" alt="Йога">
+        <div class="program-body">
+          <div class="program-tag calm">Расслабление</div>
+          <h3>Йога и стретчинг</h3>
+          <p>Восстановление, гибкость, осанка и ментальное равновесие после тяжёлых дней.</p>
+          <div class="program-meta"><span>⏱ 60 мин</span><span>🧘 спокойно</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery">
+  <div class="container">
+    <div class="section-head light">
+      <h2>Наш зал</h2>
+      <p>Загляни внутрь — современное оборудование, чистый и светлый зал.</p>
+    </div>
+    <div class="gallery-grid">
+      <img src="https://images.unsplash.com/photo-1571513801896-aaf35b8d0b10?q=80&w=800&auto=format&fit=crop" alt="Зал" class="g-item g-wide">
+      <img src="https://images.unsplash.com/photo-1574680096145-d05b474e2155?q=80&w=600&auto=format&fit=crop" alt="Тренажёры">
+      <img src="https://images.unsplash.com/photo-1517963879433-6ad2b056d712?q=80&w=600&auto=format&fit=crop" alt="Беговые дорожки">
+      <img src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=600&auto=format&fit=crop" alt="Занимающиеся">
+      <img src="https://images.unsplash.com/photo-1599058917212-d750089bc07e?q=80&w=600&auto=format&fit=crop" alt="Тренажёрный зал">
+    </div>
+  </div>
+</section>
+
+<section class="schedule" id="schedule">
+  <div class="container">
+    <div class="section-head">
+      <h2>Расписание тренировок</h2>
+      <p>Каждый день, с 7:00 до 23:00. Нажми на нужное занятие, чтобы записаться.</p>
+    </div>
+
+    <div class="sched-tabs">
+      <button class="sched-tab active" data-day="mon">Пн</button>
+      <button class="sched-tab" data-day="tue">Вт</button>
+      <button class="sched-tab" data-day="wed">Ср</button>
+      <button class="sched-tab" data-day="thu">Чт</button>
+      <button class="sched-tab" data-day="fri">Пт</button>
+      <button class="sched-tab" data-day="sat">Сб</button>
+      <button class="sched-tab" data-day="sun">Вс</button>
+    </div>
+
+    <div class="sched-list" id="schedList"></div>
+
+    <div class="sched-note">💡 Безлимитные абонементы открывают доступ ко всем групповым занятиям. Тренировки могут отличаться в праздники — уточняй у администратора.</div>
+  </div>
+</section>
+
+<section class="trainers" id="trainers">
+  <div class="container">
+    <div class="section-head">
+      <h2>Команда тренеров</h2>
+      <p>Поможем с программами, техникой и мотивацией на каждом этапе.</p>
+    </div>
+    <div class="trainer-grid">
+      <div class="trainer-card">
+        <img src="https://images.unsplash.com/photo-1567013127542-490d757e51fc?q=80&w=600&auto=format&fit=crop" alt="Алексей">
+        <div class="trainer-body">
+          <h3>Алексей Волков</h3>
+          <p class="trainer-spec">Силовые тренировки · Iron Fit</p>
+          <p>Мастер спорта по пауэрлифтингу, стаж 12 лет. Помогает построить сильное и сбалансированное тело.</p>
+        </div>
+      </div>
+      <div class="trainer-card">
+        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop" alt="Мария">
+        <div class="trainer-body">
+          <h3>Мария Соколова</h3>
+          <p class="trainer-spec">Йога · Стретчинг</p>
+          <p>Сертифицированный инструктор йоги, 10 лет практики. Вернёт гибкость, расслабит и укрепит тело.</p>
+        </div>
+      </div>
+      <div class="trainer-card">
+        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop" alt="Дмитрий">
+        <div class="trainer-body">
+          <h3>Дмитрий Орлов</h3>
+          <p class="trainer-spec">Бокс · ММА</p>
+          <p>Кандидат в мастера спорта по боксу. Научит защищаться и держать форму круглый год.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="section-head">
+      <h2>Абонементы и цены</h2>
+      <p>Без скрытых платежей. Заморозка абонемента — до 30 дней.</p>
+    </div>
+    <div class="price-grid">
+      <div class="price-card">
+        <h3>Разовое</h3>
+        <div class="price">600 ₽<span> / визит</span></div>
+        <ul>
+          <li>✅ Полный доступ к залу</li>
+          <li>✅ 1 групповое занятие</li>
+          <li>✅ Раздевалка, душ, полотенце</li>
+        </ul>
+        <a href="#booking" class="btn btn-ghost">Записаться</a>
+      </div>
+      <div class="price-card popular">
+        <div class="price-flag">Хит продаж</div>
+        <h3>Месяц</h3>
+        <div class="price">2 500 ₽<span> / мес</span></div>
+        <ul>
+          <li>✅ Безлимит тренировок</li>
+          <li>✅ Все групповые занятия</li>
+          <li>✅ Заморозка до 7 дней</li>
+          <li>✅ Фитнес-тестирование</li>
+        </ul>
+        <a href="#booking" class="btn btn-accent">Записаться</a>
+      </div>
+      <div class="price-card">
+        <h3>Год</h3>
+        <div class="price">24 000 ₽<span> / год</span></div>
+        <ul>
+          <li>✅ Всё из тарифа «Месяц»</li>
+          <li>✅ Заморозка до 30 дней</li>
+          <li>✅ 3 персональные тренировки</li>
+          <li>✅ Экономия 20%</li>
+        </ul>
+        <a href="#booking" class="btn btn-ghost">Записаться</a>
+      </div>
+    </div>
+    <div class="price-note">💬 Персональные тренировки — от 1 200 ₽ за занятие. Пакеты из 10 — скидка 15%.</div>
+  </div>
+</section>
+
+<section class="booking" id="booking">
+  <div class="container">
+    <div class="booking-inner">
+      <div class="booking-text">
+        <h2>Запишись на бесплатную тренировку</h2>
+        <p>Оставь контакты — мы подберём программу под цель, покажем зал и ответим на вопросы в течение 15 минут.</p>
+        <ul class="booking-checklist">
+          <li>✔️ Пробная тренировка бесплатно</li>
+          <li>✔️ Консультация тренера</li>
+          <li>✔️ Фитнес-тестирование при записи</li>
+          <li>✔️ Без навязчивых продаж</li>
+        </ul>
+      </div>
+      <form class="booking-form" id="bookingForm">
+        <div class="form-row">
+          <input type="text" id="bf-name" placeholder="Имя" required>
+        </div>
+        <div class="form-row">
+          <input type="tel" id="bf-phone" placeholder="Телефон" required>
+        </div>
+        <div class="form-row two">
+          <select id="bf-program" required>
+            <option value="" selected disabled>Программа</option>
+            <option value="Силовая">Силовая</option>
+            <option value="HIIT">Интервальная (HIIT)</option>
+            <option value="Бокс и ММА">Бокс и ММА</option>
+            <option value="Йога и Стретчинг">Йога и Стретчинг</option>
+            <option value="Другое">Другое</option>
+          </select>
+          <select id="bf-day" required>
+            <option value="" selected disabled>День</option>
+            <option value="Сегодня">Сегодня</option>
+            <option value="Завтра">Завтра</option>
+            <option value="Пн">Пн</option>
+            <option value="Вт">Вт</option>
+            <option value="Ср">Ср</option>
+            <option value="Чт">Чт</option>
+            <option value="Пт">Пт</option>
+            <option value="Сб">Сб</option>
+            <option value="Вс">Вс</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-accent btn-block">Отправить заявку</button>
+        <p class="form-note">Нажимая кнопку, ты отправляешь заявку администратору в Telegram.</p>
+      </form>
+    </div>
+  </div>
+</section>
+
+<section class="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div>
+        <h3>📍 Адрес</h3>
+        <p>г. Москва, ул. Спортивная, 12<br>ст. м. «Спортивная», 5 минут пешком</p>
+      </div>
+      <div>
+        <h3>🕐 Режим работы</h3>
+        <p>Понедельник — воскресенье<br><b>7:00 — 23:00</b></p>
+      </div>
+      <div>
+        <h3>📞 Контакты</h3>
+        <p>+7 (900) 000-00-00<br>info@ironfit.example</p>
+      </div>
+      <div>
+        <h3>💬 Мы в сети</h3>
+        <p><a href="https://t.me/Pay4o0k333" target="_blank">Telegram</a> · <a href="#">ВКонтакте</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <p>IronFit © 2026. Сделано с ❤️ для сильных людей</p>
+    <p>Сайт-портфолио · разработка Telegram-ботов и сайтов</p>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
