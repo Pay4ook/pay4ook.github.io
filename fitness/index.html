@@ -197,7 +197,7 @@
       <p>Без скрытых платежей. Заморозка абонемента — до 30 дней.</p>
     </div>
     <div class="price-grid">
-      <div class="price-card">
+      <div class="price-card" data-plan="Разовое" data-price="600">
         <h3>Разовое</h3>
         <div class="price">600 ₽<span> / визит</span></div>
         <ul>
@@ -205,9 +205,9 @@
           <li>✅ 1 групповое занятие</li>
           <li>✅ Раздевалка, душ, полотенце</li>
         </ul>
-        <a href="#booking" class="btn btn-ghost">Записаться</a>
+        <button class="btn btn-ghost" onclick="openPayment(this)">Оплатить</button>
       </div>
-      <div class="price-card popular">
+      <div class="price-card popular" data-plan="Месяц" data-price="2500">
         <div class="price-flag">Хит продаж</div>
         <h3>Месяц</h3>
         <div class="price">2 500 ₽<span> / мес</span></div>
@@ -217,9 +217,9 @@
           <li>✅ Заморозка до 7 дней</li>
           <li>✅ Фитнес-тестирование</li>
         </ul>
-        <a href="#booking" class="btn btn-accent">Записаться</a>
+        <button class="btn btn-accent" onclick="openPayment(this)">Оплатить</button>
       </div>
-      <div class="price-card">
+      <div class="price-card" data-plan="Год" data-price="24000">
         <h3>Год</h3>
         <div class="price">24 000 ₽<span> / год</span></div>
         <ul>
@@ -228,10 +228,10 @@
           <li>✅ 3 персональные тренировки</li>
           <li>✅ Экономия 20%</li>
         </ul>
-        <a href="#booking" class="btn btn-ghost">Записаться</a>
+        <button class="btn btn-ghost" onclick="openPayment(this)">Оплатить</button>
       </div>
     </div>
-    <div class="price-note">💬 Персональные тренировки — от 1 200 ₽ за занятие. Пакеты из 10 — скидка 15%.</div>
+    <div class="price-note">💬 Демо-оплата: никакие деньги не списываются, это пример сайта.</div>
   </div>
 </section>
 
@@ -315,6 +315,39 @@
 </footer>
 
 <div class="toast" id="toast"></div>
+
+<div class="pay-modal" id="payModal">
+  <div class="pay-modal-bg" onclick="closePayment()"></div>
+  <div class="pay-card">
+    <button class="pay-close" onclick="closePayment()">✕</button>
+    <h3 class="pay-title">Оплата абонемента</h3>
+    <p class="pay-sub">Демо-режим — платёж не настоящий</p>
+    <div class="pay-plan" id="payPlan">—</div>
+    <div class="pay-form">
+      <div class="form-row">
+        <input type="text" placeholder="Номер карты" id="pm-card" maxlength="19" inputmode="numeric">
+      </div>
+      <div class="form-row two">
+        <input type="text" placeholder="ММ/ГГ" id="pm-exp" maxlength="5" inputmode="numeric">
+        <input type="text" placeholder="CVC" id="pm-cvc" maxlength="3" inputmode="numeric">
+      </div>
+      <div class="form-row">
+        <input type="text" placeholder="Имя на карте" id="pm-name">
+      </div>
+      <button class="btn btn-accent btn-block" onclick="doPayment()">💳 Оплатить <span id="payAmount">—</span> ₽</button>
+      <p class="form-note">🔒 Демо-сайт: данные никуда не отправляются и ничего не списывается.</p>
+    </div>
+  </div>
+</div>
+
+<div class="pay-success" id="paySuccess">
+  <div class="pay-success-inner">
+    <div class="pay-success-icon">✅</div>
+    <h3>Оплата прошла!</h3>
+    <p>Это была демо-оплата в примере сайта. На реальном сайте здесь подключили бы настоящий платёжный шлюз.</p>
+    <button class="btn btn-accent" onclick="closeSuccess()">Отлично</button>
+  </div>
+</div>
 
 <script src="script.js"></script>
 </body>
