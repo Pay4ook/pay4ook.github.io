@@ -1,6 +1,6 @@
-const SCHEDULE = {
+﻿const SCHEDULE = {
   mon: [
-    { time: "07:00", name: "Силовая тренировка", coach: "Алексей Волков" },
+    { time: "07:00", name: "Силовая тренировка", coach: "Алексей Исаев" },
     { time: "09:00", name: "Интервальная (HIIT)", coach: "Дмитрий Орлов" },
     { time: "12:00", name: "Йога и стретчинг", coach: "Мария Соколова" },
     { time: "18:00", name: "Бокс и ММА", coach: "Дмитрий Орлов" },
@@ -139,9 +139,7 @@ document.getElementById("bookingForm").addEventListener("submit", function (e) {
   this.reset();
   showToast("Заявка отправлена! Отвечаем в течение 15 минут");
 
-  setTimeout(() => {
-    window.open("https://t.me/Pay4o0k333?text=" + msg, "_blank");
-  }, 600);
+  
 });
 
 renderSchedule("mon");
