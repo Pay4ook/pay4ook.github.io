@@ -288,3 +288,36 @@ img { display: block; max-width: 100%; }
   .feature-grid, .program-grid { grid-template-columns: 1fr; }
   .hero { padding: 70px 0 60px; }
 }
+/* ---------- Mobile burger & menu ---------- */
+.burger {
+  display: none; flex-direction: column; justify-content: center; gap: 5px;
+  width: 42px; height: 42px; padding: 9px; background: transparent; border: 1px solid var(--border);
+  border-radius: 10px; cursor: pointer; z-index: 60;
+}
+.burger span {
+  display: block; width: 22px; height: 2px; background: var(--text);
+  border-radius: 2px; transition: transform 0.3s, opacity 0.3s;
+}
+.burger.active span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.burger.active span:nth-child(2) { opacity: 0; }
+.burger.active span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mnav {
+  position: fixed; top: 66px; left: 12px; right: 12px; z-index: 55;
+  background: var(--card); border: 1px solid var(--border); border-radius: 14px;
+  padding: 10px; display: none; flex-direction: column;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+.mnav.open { display: flex; animation: fadeUp 0.25s ease both; }
+.mnav a { padding: 14px 16px; border-radius: 10px; font-size: 16px; color: var(--muted); transition: background 0.2s, color 0.2s; }
+.mnav a:hover { background: rgba(255, 90, 44, 0.08); color: var(--text); }
+
+.mnav-overlay {
+  position: fixed; inset: 0; z-index: 53; background: rgba(0, 0, 0, 0.55);
+  opacity: 0; pointer-events: none; transition: opacity 0.3s;
+}
+.mnav-overlay.open { opacity: 1; pointer-events: auto; }
+
+@media (max-width: 900px) {
+  .burger { display: flex; }
+}
