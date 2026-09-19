@@ -235,6 +235,30 @@ img { display: block; max-width: 100%; }
 .contact p { color: var(--muted); font-size: 14px; }
 .contact a { color: var(--accent); }
 
+/* ---------- Payment modal ---------- */
+.pay-modal, .pay-success { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; }
+.pay-modal.open, .pay-success.open { display: flex; }
+.pay-modal-bg { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); animation: fadeIn 0.25s ease both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+.pay-card { position: relative; width: 100%; max-width: 400px; background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 30px; animation: popIn 0.3s ease both; }
+@keyframes popIn { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.pay-close { position: absolute; top: 12px; right: 14px; background: transparent; border: none; color: var(--muted); font-size: 20px; cursor: pointer; transition: color 0.2s, transform 0.2s; }
+.pay-close:hover { color: var(--text); transform: rotate(90deg); }
+.pay-title { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
+.pay-sub { color: var(--muted); font-size: 13px; margin-bottom: 16px; }
+.pay-plan { background: rgba(255, 90, 44, 0.1); border: 1px solid rgba(255, 90, 44, 0.3); color: var(--accent); border-radius: 10px; padding: 10px 14px; font-weight: 700; font-size: 15px; margin-bottom: 16px; }
+.pay-form .form-row { margin-bottom: 12px; }
+.pay-form input { width: 100%; padding: 13px 15px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 15px; outline: none; transition: border-color 0.2s; }
+.pay-form input:focus { border-color: var(--accent); }
+.pay-form input.fake { color: var(--muted); font-style: italic; }
+
+.pay-success { z-index: 300; }
+.pay-success-inner { text-align: center; max-width: 380px; background: var(--card); border: 1px solid rgba(61, 220, 132, 0.4); border-radius: 18px; padding: 36px 30px; animation: popIn 0.3s ease both; }
+.pay-success-icon { font-size: 52px; margin-bottom: 12px; animation: successPop 0.5s ease both; }
+@keyframes successPop { 0% { transform: scale(0); } 60% { transform: scale(1.2); } 100% { transform: scale(1); } }
+.pay-success-inner h3 { font-size: 22px; margin-bottom: 10px; color: var(--green); }
+.pay-success-inner p { color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+
 /* ---------- Footer ---------- */
 .footer { border-top: 1px solid var(--border); padding: 28px 0; }
 .footer-inner { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; color: var(--muted); font-size: 14px; }
