@@ -54,6 +54,31 @@ const schedList = document.getElementById("schedList");
 const toast = document.getElementById("toast");
 let currentDay = "mon";
 
+document.querySelectorAll(".btn").forEach((btn) => {
+  btn.addEventListener("click", function (e) {
+    const rect = this.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const ripple = document.createElement("span");
+    ripple.className = "btn-ripple";
+    ripple.style.width = ripple.style.height = size + "px";
+    ripple.style.left = (e.clientX - rect.left - size / 2) + "px";
+    ripple.style.top = (e.clientY - rect.top - size / 2) + "px";
+    this.appendChild(ripple);
+    ripple.addEventListener("animationend", () => ripple.remove());
+  });
+});
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll(".reveal").forEach((el) => revealObserver.observe(el));
+
 function renderSchedule(day) {
   const items = SCHEDULE[day] || [];
   schedList.innerHTML = `<h3 class="sched-day-title">${DAY_NAMES[day]}</h3>` +
