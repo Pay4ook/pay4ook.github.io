@@ -145,3 +145,54 @@ document.getElementById("bookingForm").addEventListener("submit", function (e) {
 });
 
 renderSchedule("mon");
+
+/* ---------- Fake payment ---------- */
+function openPayment(btn) {
+  const card = btn.closest(".price-card");
+  const plan = card.dataset.plan;
+  const price = card.dataset.price;
+  document.getElementById("payPlan").textContent = "Абонемент: " + plan;
+  document.getElementById("payAmount").textContent = Number(price).toLocaleString("ru-RU");
+  const inputs = document.querySelectorAll("#payModal input");
+  inputs.forEach((i) => { i.value = ""; i.classList.remove("fake"); });
+  document.getElementById("payModal").classList.add("open");
+}
+
+function closePayment() {
+  document.getElementById("payModal").classList.remove("open");
+}
+
+function doPayment() {
+  const cardNum = document.getElementById("pm-card").value.trim();
+  const exp = document.getElementById("pm-exp").value.trim();
+  const cvc = document.getElementById("pm-cvc").value.trim();
+  const name = document.getElementById("pm-name").value.trim();
+
+  const digits = cardNum.replace(/\D/g, "");
+  if (digits.length < 16 || exp.length < 3 || cvc.length < 3 || !name) {
+    showToast("Заполни данные карты — это демо, можно вписать любые 16 цифр");
+    return;
+  }
+
+  document.getElementById("payModal").classList.remove("open");
+  setTimeout(() => document.getElementById("paySuccess").classList.add("open"), 200);
+}
+
+function closeSuccess() {
+  document.getElementById("paySuccess").classList.remove("open");
+  showToast("Демо-оплата завершена. Это пример сайта — деньги не списаны");
+}
+
+document.getElementById("pm-card").addEventListener("input", function (e) {
+  let v = this.value.replace(/\D/g, "").slice(0, 16);
+  this.value = v.replace(/(.{4})/g, "$1 ").trim();
+});
+
+document.getElementById("pm-exp").addEventListener("input", function (e) {
+  let v = this.value.replace(/\D/g, "").slice(0, 4);
+  this.value = v.length > 2 ? v.slice(0, 2) + "/" + v.slice(2) : v;
+});
+
+document.addEventListener("keydown", function (e) {
+  if (e.key === "Escape") { closePayment(); closeSuccess(); }
+});
