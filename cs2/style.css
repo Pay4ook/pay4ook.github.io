@@ -335,3 +335,12 @@ body::after{bottom:12%;right:-30px;transform:rotate(5deg)}
 body{background:radial-gradient(circle at 15% 20%,#101028,#0a0a12 60%)}
 .hero,.trainer-pic{border:2px solid var(--accent);box-shadow:0 0 30px rgba(0,255,255,.3)}
 h1,h2{color:#d6ff3a}
+.bg_frazi{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:2}
+.bg_frazi span{position:absolute;font-size:5vw;font-weight:900;color:rgba(255,244,64,.14);letter-spacing:.5em;text-transform:uppercase;white-space:nowrap}
+.bg_frazi span:nth-child(1){top:12%;left:-2%;transform:rotate(-6deg);color:rgba(255,46,93,.20)}
+.bg_frazi span:nth-child(2){top:42%;right:-3%;transform:rotate(5deg);color:rgba(32,255,214,.20)}
+.bg_frazi span:nth-child(3){top:70%;left:2%;transform:rotate(-4deg);color:rgba(102,92,255,.20)}
+.bg_frazi span:nth-child(4){top:88%;right:6%;transform:rotate(7deg);color:rgba(255,255,64,.16)}
+.bg_frazi span:nth-child(5){top:26%;left:55%;color:rgba(255,64,200,.12)}
+.bg_frazi span:nth-child(6){bottom:8%;left:38%;color:rgba(64,255,150,.12)}
+body{background:#05060c !important}
