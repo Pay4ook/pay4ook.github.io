@@ -351,3 +351,11 @@ body{background:#05060c !important}
 .ph_bg span:nth-child(3){bottom:18%;left:4%;transform:rotate(-5deg)}
 .ph_bg span:nth-child(4){bottom:8%;right:2%;transform:rotate(7deg)}
 .trainer_main{display:block;max-height:62vh;max-width:86%;margin:6vh auto;border:3px solid #3ff;border-radius:24px;box-shadow:0 0 40px rgba(50,220,255,.6);z-index:2;position:relative}
+.ph_wrap{position:fixed;inset:0;pointer-events:none;z-index:1;overflow:hidden}
+.ph_wrap span{position:absolute;font-size:7vmin;font-weight:900;color:rgba(255,80,0,.16);text-transform:uppercase;letter-spacing:.15em;white-space:nowrap}
+.ph_wrap span:nth-child(1){top:12%;left:2%;transform:rotate(-10deg)}
+.ph_wrap span:nth-child(2){top:38%;right:1%;transform:rotate(8deg)}
+.ph_wrap span:nth-child(3){top:64%;left:1%;transform:rotate(-5deg)}
+.ph_wrap span:nth-child(4){top:88%;right:0;transform:rotate(6deg)}
+.zhora-pic{display:block;max-width:min(82%,560px);max-height:70vh;margin:3vh auto;object-fit:contain;border-radius:26px;border:5px solid #ffcc00;box-shadow:0 0 50px rgba(255,204,0,.55);position:relative;z-index:2}
+.zhora-pic+*{position:relative;z-index:2}
