@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PCMASTER — Космические сборки ПК</title>
+<meta name="description" content="PCMASTER — портфолио: три мощных игровых ПК, 3D-витрина, характеристики видеокарт, заказ сборки.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="stars" aria-hidden="true"></div>
+<div class="nebula" aria-hidden="true"></div>
+<div class="planet planet-a" aria-hidden="true"></div>
+<div class="planet planet-b" aria-hidden="true"></div>
+
+<header>
+  <div class="logo">PCMASTER<span class="logo-dot">.</span></div>
+  <nav class="main-nav">
+    <a href="#rigs">Сборки</a>
+    <a href="#how">Как работает</a>
+    <a href="#order">Заказ</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-copy">
+    <h1 class="gradient-text">СОБЕРИ СВОЮ<br>ГАЛАКТИКУ МОЩИ</h1>
+    <p>Три космические сборки. Нажми «Узнать характеристики», раскрой каждую деталь — видеокарта, процессор, память — и закажи свою со своей ценой.</p>
+    <div class="hero-actions">
+      <a href="#rigs" class="btn btn-primary">Смотреть сборки</a>
+      <span class="price-tag">от 89 990 ₽</span>
+    </div>
+  </div>
+  <div class="pc-cube" aria-hidden="true">
+    <div class="cube-inner">
+      <div class="face front">RTX</div>
+      <div class="face back">CORE</div>
+      <div class="face right">RAM</div>
+      <div class="face left">SSD</div>
+      <div class="face top">POWER</div>
+      <div class="face bottom">COOL</div>
+    </div>
+  </div>
+</section>
+
+<section class="rigs" id="rigs">
+  <h2 class="sect-title">Выбери свою сборку</h2>
+  <p class="sect-sub">Три конфигурации — от «базовой» до «легендарной». Наведи, нажми, раскрой.</p>
+
+  <div class="rig" data-rig="1">
+    <div class="rig-front">
+      <div class="rig-gpu glow-gpu nvidia"></div>
+      <h3>NOVA START</h3>
+      <p class="rig-power">FHD гейминг</p>
+      <div class="rig-ctrl">
+        <button class="btn btn-dark detail-btn">Узнать характеристики</button>
+        <span class="rig-price">от 89 990 ₽</span>
+      </div>
+    </div>
+    <div class="rig-detail">
+      <div class="detail-col">
+        <div class="gpu-3d" data-gpu="rtx4060">
+          <div class="gpu-face gpu-top"></div>
+          <div class="gpu-face gpu-body"></div>
+          <div class="gpu-label">RTX 4060</div>
+        </div>
+        <h4>Видеокарта</h4>
+        <p>GeForce RTX 4060 8GB GDDR6 — 3072 ядра CUDA, DLSS 3, трассировка лучей. Тянет FHD на ультра.</p>
+      </div>
+      <div class="detail-col">
+        <h4>Процессор</h4>
+        <p>AMD Ryzen 5 5600, 6 ядер / 12 потоков.</p>
+        <h4>Память и накопитель</h4>
+        <p>16GB DDR4 3200 • 1TB NVMe SSD.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rig" data-rig="2">
+    <div class="rig-front">
+      <div class="rig-gpu glow-gpu amd"></div>
+      <h3>ORBIT X</h3>
+      <p class="rig-power">2K ультра</p>
+      <div class="rig-ctrl">
+        <button class="btn btn-dark detail-btn">Узнать характеристики</button>
+        <span class="rig-price">от 159 990 ₽</span>
+      </div>
+    </div>
+    <div class="rig-detail">
+      <div class="detail-col">
+        <div class="gpu-3d" data-gpu="rx7800xt">
+          <div class="gpu-label">RX 7800 XT</div>
+        </div>
+        <h4>Видеокарта</h4>
+        <p>AMD Radeon RX 7800 XT 16GB GDDR6 — 3840 потоков, FSR 3. 2K на ультра без компромиссов.</p>
+      </div>
+      <div class="detail-col">
+        <h4>Процессор</h4>
+        <p>AMD Ryzen 7 7800X3D, 8 ядер / 16 потоков.</p>
+        <h4>Память и накопитель</h4>
+        <p>32GB DDR5 6000 • 2TB NVMe Gen4.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="rig" data-rig="3">
+    <div class="rig-front">
+      <div class="rig-gpu glow-gpu flagship"></div>
+      <h3>SUPERNOVA LEGEND</h3>
+      <p class="rig-power">4K максимум</p>
+      <div class="rig-ctrl">
+        <button class="btn btn-dark detail-btn">Узнать характеристики</button>
+        <span class="rig-price">от 289 990 ₽</span>
+      </div>
+    </div>
+    <div class="rig-detail">
+      <div class="detail-col">
+        <div class="gpu-3d" data-gpu="rtx4080">
+          <div class="gpu-label">RTX 4080 SUPER</div>
+        </div>
+        <h4>Видеокарта</h4>
+        <p>GeForce RTX 4080 SUPER 16GB GDDR6X — 10240 ядер CUDA, DLSS 3.5, 4K на ультра + трассировка.</p>
+      </div>
+      <div class="detail-col">
+        <h4>Процессор</h4>
+        <p>Intel Core i9-14900K, 24 ядра / 32 потока.</p>
+        <h4>Память и накопитель</h4>
+        <p>64GB DDR5 7200 • 2TB + 4TB NVMe Gen5.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <h2 class="sect-title">Как это работает</h2>
+  <div class="steps">
+    <div class="step"><span class="step-num">1</span><p>Выбираешь сборку</p></div>
+    <div class="step"><span class="step-num">2</span><p>Раскрываешь детали</p></div>
+    <div class="step"><span class="step-num">3</span><p>Жмёшь «Заказать»</p></div>
+    <div class="step"><span class="step-num">4</span><p>Получаешь космос мощности</p></div>
+  </div>
+</section>
+
+<section class="order" id="order">
+  <h2 class="sect-title">Заказать сборку</h2>
+  <p class="sect-sub">Выбери ПК и мы соберём его для тебя на орбите.</p>
+  <div class="order-row">
+    <select id="rig-select">
+      <option value="1">NOVA START — 89 990 ₽</option>
+      <option value="2">ORBIT X — 159 990 ₽</option>
+      <option value="3">SUPERNOVA LEGEND — 289 990 ₽</option>
+    </select>
+    <button class="btn btn-primary" id="order-btn">Заказать (демо)</button>
+  </div>
+  <p class="order-note">Это портфолио — заказ и оплата ненастоящие. Цены условные.</p>
+</section>
+
+<footer>
+  <p>PCMASTER — демо-проект для портфолио. Все анимации, 3D и цены вымышлены.</p>
+</footer>
+
+<div class="toast" id="toast">Заказ принят! Свяжемся с тобой в космосе.</div>
+
+<script src="script.js"></script>
+</body>
+</html>
