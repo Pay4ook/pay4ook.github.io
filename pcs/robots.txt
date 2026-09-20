@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /pcs/
+Sitemap: https://pay4ook.github.io/pcs/sitemap.xml
