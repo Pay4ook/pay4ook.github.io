@@ -1,10 +1,12 @@
 document.querySelectorAll('.rig').forEach(rig=>{
   const btn=rig.querySelector('.detail-btn');
+  const hide=rig.querySelector('.hide-btn');
   const gpu=rig.querySelector('.gpu-3d');
   btn.addEventListener('click',()=>{
     rig.classList.add('open');
     setTimeout(()=>{rig.scrollIntoView({behavior:'smooth',block:'start'})},120);
   });
+  if(hide) hide.addEventListener('click',()=>rig.classList.remove('open'));
   if(gpu){
     document.addEventListener('mousemove',e=>{
       const r=rig.getBoundingClientRect();
