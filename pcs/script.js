@@ -36,7 +36,7 @@
     }
   });
 
-  // Параллакс видеокарты в открытой карточке
+  // ===== Параллакс видеокарты в открытой карточке =====
   document.addEventListener("mousemove", function (e) {
     RIGS.forEach(function (rig) {
       var gpu = rig.querySelector(".rig-gpu");
@@ -44,42 +44,43 @@
       var rect = rig.getBoundingClientRect();
       var dx = (e.clientX - (rect.left + rect.width / 2)) / rect.width;
       var dy = (e.clientY - (rect.top + rect.height / 2)) / rect.height;
-      gpu.style.transform = "translate3d(" + (dx * 26) + "px," + (dy * 20) + "px,0) rotateY(" + (dx * 16) + "deg) rotateX(" + (-dy * 12) + "deg)";
+      gpu.style.transform = "translate3d(" + (dx * 22) + "px," + (dy * 18) + "px,0) rotateY(" + (dx * 16) + "deg) rotateX(" + (-dy * 12) + "deg)";
     });
   });
 
-  // Тосты
-  var toast = document.getElementById("toast");
-  var toastTimer = null;
+  // ===== Штрих-переход между страницами (дёмп сквозь штору) =====
+  var veil = document.createElement("div");
+  veil.className = "veil";
+  document.body.appendChild(veil.version);
+  var leaving = false;
 
-  function showToast(msg) {
-    if (!toast) return;
-    toast.textContent = msg;
-    toast.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(function () {
-      toast.classList.remove("show");
-    }, 3000);
+  function forceLeave(href, e) {
+    if (leaving) return;
+    leaving = true;
+    e.preventDefault();
+    veil.classList.add("show");
+    setTimeout(function () {
+      window.location.href = href;
+    }, 380);
   }
 
-  var orderBtn = document.querySelector(".order-btn");
-  if (orderBtn) {
-    orderBtn.addEventListener("click", function () {
-      var sel = document.getElementById("rig-select");
-      var name = sel && sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex].textContent : "выбранная сборка";
-      showToast("Заявка отправлена: " + name + " (демо).");
-    });
-  }
+  document.addEventListener("click", function (e) {
+    if (leaving) return;
+    var a = e.target.closest("a[href]");
+    if (!a) return;
+    var href = a.getAttribute("href");
+    if (!href) return;
+    if (a.getAttribute("target")) return;
+    if (href.charAt(0) === "#") return;
+    try {
+      var u = new URL(href, location.href);
+      if (u.origin !== location.origin) return;
+      forceLeave(u.href, e);
+    } catch (err) {}
+  });
 
-  // Якорная навигация без прыжка
-  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
-    a.addEventListener("click", function (e) {
-      var id = a.getAttribute("href").slice(1);
-      var el = document.getElementById(id);
-      if (el) {
-        e.preventDefault();
-        el.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    });
+  window.addEventListener("pageshow", function () {
+    veil.classList.remove("show");
+    leaving = false;
   });
 })();
