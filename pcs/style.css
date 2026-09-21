@@ -79,6 +79,7 @@ h1 em{font-style:normal;color:var(--amber)}
 /* характеристики раскрытием */
 .rig-detail{display:none;padding:1.4rem 1.6rem 1.8rem;border-top:1px dashed var(--line);background:rgba(0,0,0,.12)}
 .rig.open .rig-detail{display:block;animation:sheet .4s cubic-bezier(.2,.7,.3,1)}
+.rig.closing .rig-detail{display:block;animation:sheet .35s cubic-bezier(.55,.06,.68,.19) reverse;pointer-events:none}
 @keyframes sheet{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 .detail-col h4{font-size:.72rem;letter-spacing:.14em;color:var(--amber);text-transform:uppercase;margin:1rem 0 .35rem}
 .detail-col h4:first-child{margin-top:0}
