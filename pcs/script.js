@@ -2,9 +2,20 @@
   "use strict";
 
   function openRig(r, o) {
-    r.classList.toggle("open", o);
-    var g = r.querySelector(".gpu-3d");
-    if (g) g.classList.toggle("lit", o);
+    if (o) {
+      r.classList.remove("closing");
+      r.classList.add("open");
+      var g = r.querySelector(".gpu-3d");
+      if (g) g.classList.add("lit");
+    } else {
+      if (!r.classList.contains("open") || r.classList.contains("closing")) return;
+      var g2 = r.querySelector(".gpu-3d");
+      if (g2) g2.classList.remove("lit");
+      r.classList.add("closing");
+      setTimeout(function () {
+        r.classList.remove("open", "closing");
+      }, 340);
+    }
   }
 
   document.querySelectorAll(".rig").forEach(function (rig) {
