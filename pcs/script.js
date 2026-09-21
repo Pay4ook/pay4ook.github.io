@@ -1,48 +1,85 @@
-document.querySelectorAll('.rig').forEach(rig=>{
-  const btn=rig.querySelector('.detail-btn');
-  const hide=rig.querySelector('.hide-btn');
-  const gpu=rig.querySelector('.gpu-3d');
-  btn.addEventListener('click',()=>{
-    rig.classList.add('open');
-    setTimeout(()=>{rig.scrollIntoView({behavior:'smooth',block:'start'})},120);
+(function () {
+  "use strict";
+
+  var RIGS = document.querySelectorAll(".rig");
+
+  function setOpen(rig, open) {
+    rig.classList.toggle("open", open);
+    var g = rig.querySelector(".rig-gpu");
+    if (g) g.classList.toggle("lit", open);
+  }
+
+  RIGS.forEach(function (rig) {
+    var openBtn = rig.querySelector(".detail-btn");
+    var hideBtn = rig.querySelector(".hide-btn");
+    var front = rig.querySelector(".rig-front");
+
+    if (openBtn) {
+      openBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setOpen(rig, true);
+      });
+    }
+    if (hideBtn) {
+      hideBtn.addEventListener("click", function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setOpen(rig, false);
+      });
+    }
+    if (front) {
+      front.addEventListener("click", function (e) {
+        if (e.target.closest("a,button")) return;
+        setOpen(rig, !rig.classList.contains("open"));
+      });
+    }
   });
-  if(hide) hide.addEventListener('click',()=>rig.classList.remove('open'));
-  if(gpu){
-    rig.addEventListener('mousemove',e=>{
-      const r=rig.getBoundingClientRect();
-      const dx=(e.clientX-(r.left+r.width/2))/r.width;
-      const dy=(e.clientY-(r.top+r.height/2))/r.height;
-      const dz=rig.classList.contains('open')?26:0;
-      gpu.style.transform=`rotateY(${dx*34}deg) rotateX(${-dy*30}deg) translateZ(${dz}px)`;
+
+  // Параллакс видеокарты в открытой карточке
+  document.addEventListener("mousemove", function (e) {
+    RIGS.forEach(function (rig) {
+      var gpu = rig.querySelector(".rig-gpu");
+      if (!gpu || !rig.classList.contains("open")) return;
+      var rect = rig.getBoundingClientRect();
+      var dx = (e.clientX - (rect.left + rect.width / 2)) / rect.width;
+      var dy = (e.clientY - (rect.top + rect.height / 2)) / rect.height;
+      gpu.style.transform = "translate3d(" + (dx * 26) + "px," + (dy * 20) + "px,0) rotateY(" + (dx * 16) + "deg) rotateX(" + (-dy * 12) + "deg)";
     });
-    rig.addEventListener('mouseleave',()=>{
-      gpu.style.transform='none';
+  });
+
+  // Тосты
+  var toast = document.getElementById("toast");
+  var toastTimer = null;
+
+  function showToast(msg) {
+    if (!toast) return;
+    toast.textContent = msg;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () {
+      toast.classList.remove("show");
+    }, 3000);
+  }
+
+  var orderBtn = document.querySelector(".order-btn");
+  if (orderBtn) {
+    orderBtn.addEventListener("click", function () {
+      var sel = document.getElementById("rig-select");
+      var name = sel && sel.selectedIndex >= 0 ? sel.options[sel.selectedIndex].textContent : "выбранная сборка";
+      showToast("Заявка отправлена: " + name + " (демо).");
     });
   }
-  const ord=rig.querySelector('.order-pc');
-  if(ord) ord.addEventListener('click',()=>{
-    const price=rig.querySelector('.rig-price').textContent;
-    showToast('Заявка принята: '+price+' (демо — оплата ненастоящая). Жди связи!');
+
+  // Якорная навигация без прыжка
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener("click", function (e) {
+      var id = a.getAttribute("href").slice(1);
+      var el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
   });
-});
-
-const sel=document.getElementById('rig-select');
-const btnOrd=document.getElementById('order-btn');
-btnOrd.addEventListener('click',()=>{
-  const t=sel.options[sel.selectedIndex].text;
-  showToast('Заказ на сборку «'+t+'» оформлен (фейк). Пришлём на почту из портфолио. Космос ждёт!');
-});
-
-function showToast(txt){
-  let t=document.querySelector('.toast');
-  if(!t){t=document.createElement('div');t.className='toast';document.body.appendChild(t);}
-  t.textContent=txt;t.classList.add('show');
-  clearTimeout(window.__tt);
-  window.__tt=setTimeout(()=>t.classList.remove('show'),3600);
-}
-
-const drifts=document.querySelectorAll('.drift');
-drifts.forEach(d=>{
-  const s=Math.random()*2.5+.6;
-  d.style.animationDuration=s+'s';
-});
+})();
