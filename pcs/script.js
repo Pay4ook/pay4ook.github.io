@@ -14,7 +14,7 @@
       r.classList.add("closing");
       setTimeout(function () {
         r.classList.remove("open", "closing");
-      }, 340);
+      }, 400);
     }
   }
 
