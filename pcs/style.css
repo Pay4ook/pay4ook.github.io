@@ -77,23 +77,23 @@ h1 em{font-style:normal;color:var(--amber)}
 .rig-price{font-weight:800;color:var(--amber)}
 
 /* характеристики раскрытием */
-.rig-detail{display:grid;grid-template-columns:1fr 1fr;gap:2rem;padding:1.4rem 1.6rem 1.8rem;border-top:1px dashed var(--line);background:rgba(0,0,0,.12)}
-.rig.open .rig-detail{animation:sheet .4s cubic-bezier(.2,.7,.3,1)}
+.rig-detail{display:none;padding:1.4rem 1.6rem 1.8rem;border-top:1px dashed var(--line);background:rgba(0,0,0,.12)}
+.rig.open .rig-detail{display:block;animation:sheet .4s cubic-bezier(.2,.7,.3,1)}
 @keyframes sheet{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
 .detail-col h4{font-size:.72rem;letter-spacing:.14em;color:var(--amber);text-transform:uppercase;margin:1rem 0 .35rem}
 .detail-col h4:first-child{margin-top:0}
 .detail-col p{color:var(--dim);font-size:.84rem}
 
 /* ============ 3D-КУБ В HERO ============ */
-.gradient-text{background:linear-gradient(92deg,var(--ink) 30%,var(--amber) 70%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.gradient-text{background:linear-gradient(100deg,var(--ink) 20%,#ffd57a 45%,var(--amber) 62%,var(--rust) 85%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent;filter:drop-shadow(0 2px 22px rgba(255,179,0,.18))}
 .pc-cube{flex:0 0 320px;height:320px;position:relative;perspective:900px;z-index:2;display:flex;align-items:center;justify-content:center}
-.cube-inner{position:relative;width:170px;height:170px;transform-style:preserve-3d;animation:cubeSpin 16s linear infinite}
+.cube-inner{position:relative;width:170px;height:170px;transform-style:preserve-3d;animation:cubeSway 12s ease-in-out infinite}
 .face{position:absolute;width:170px;height:170px;display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-weight:900;font-size:1.35rem;letter-spacing:.06em;color:var(--ink);background:rgba(27,29,36,.78);border:1px solid var(--line);backdrop-filter:blur(2px)}
 .face::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(233,231,224,.06),transparent 55%)}
 .face.front{transform:translateZ(85px)}.face.back{transform:rotateY(180deg) translateZ(85px)}
 .face.right{transform:rotateY(90deg) translateZ(85px)}.face.left{transform:rotateY(-90deg) translateZ(85px)}
 .face.top{transform:rotateX(90deg) translateZ(85px)}.face.bottom{transform:rotateX(-90deg) translateZ(85px)}
-@keyframes cubeSpin{to{transform:rotateX(-18deg) rotateY(360deg)}}
+@keyframes cubeSway{0%{transform:rotateX(-16deg) rotateY(-22deg)}50%{transform:rotateX(-10deg) rotateY(18deg)}100%{transform:rotateX(-16deg) rotateY(-22deg)}}
 @media(max-width:900px){.pc-cube{display:none}}
 
 /* ============ КАК ЗАКАЗАТЬ / ШАГИ ============ */
@@ -164,7 +164,7 @@ footer p{max-width:52ch;line-height:1.7}
   .rig-front{flex-direction:column;text-align:left}
   .rig-3d{display:none}
   .steps{grid-template-columns:1fr 1fr}
-  .rig-detail{grid-template-columns:1fr}
+  .comps{grid-template-columns:1fr 1fr}
   .rig-gpu{flex-basis:96px;height:70px}
 }
 @media(max-width:520px){.steps{grid-template-columns:1fr}}
