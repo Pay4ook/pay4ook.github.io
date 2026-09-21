@@ -59,6 +59,20 @@ h1{font-size:3.4rem;line-height:1.08;font-weight:900;margin-bottom:1.2rem}
 .rig-ctrl{display:flex;align-items:center;gap:1.4rem;margin-top:1rem}
 .rig-price{font-size:1.2rem;font-weight:800;color:var(--accent)}
 .rig-detail{display:none;grid-template-columns:1fr 1fr;gap:2rem;margin-top:1.8rem;padding-top:1.8rem;border-top:1px dashed rgba(125,249,255,.3);animation:reveal .5s ease}
+.rig.open .rig-front{animation:rigPop .55s cubic-bezier(.2,.9,.3,1.4)}
+@keyframes rigPop{0%{transform:translateY(-8px) rotateX(6deg) scale(.985)}100%{transform:none}}
+.rig.open .rig-gpu{animation:gpuOpen 1.15s cubic-bezier(.25,.9,.3,1.2) both;transform-style:preserve-3d}
+@keyframes gpuOpen{0%{transform:rotateY(0) rotateX(0) scale(1);filter:brightness(1.3)}40%{transform:rotateY(200deg) rotateX(10deg) scale(1.35);filter:brightness(1.6)}100%{transform:none}}
+.rig.open .detail-col{gap:1.1rem}
+.rig.open .detail-col:nth-child(1){animation:colIn .6s ease .12s both}
+.rig.open .detail-col:nth-child(2){animation:colIn .6s ease .22s both}
+@keyframes colIn{from{opacity:0;transform:translateX(28px) rotateY(-14deg)}to{opacity:1;transform:none}}
+.rig.open .gpu-3d{animation:gpuUnveil 1.3s cubic-bezier(.2,.85,.3,1.2) .05s both;transform-style:preserve-3d}
+@keyframes gpuUnveil{0%{transform:rotateY(-95deg) rotateX(18deg) translateZ(-40px);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+.rig.open .gpu-3d::before{content:"";position:absolute;inset:12%;border:2px dashed rgba(125,249,255,.55);border-radius:14px;animation:scanRing 1.6s ease-in-out .35s infinite;pointer-events:none}
+@keyframes scanRing{0%,100%{transform:scale(.85) rotateX(0);opacity:.15}50%{transform:scale(1.15) rotateX(12deg);opacity:.9}}
+.rig.open .gpu-label{animation:labelGlow 2.2s ease-in-out .5s infinite}
+@keyframes labelGlow{0%,100%{text-shadow:0 0 8px currentColor}50%{text-shadow:0 0 26px currentColor,0 0 60px currentColor}}
 .rig.open .rig-detail{display:grid}
 .rig.open .detail-btn{display:none}
 @keyframes reveal{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
@@ -81,5 +95,16 @@ select{background:#0c1224;color:#eef1ff;border:1px solid rgba(125,249,255,.4);bo
 .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(120%);background:#0c1224;border:1px solid var(--neon);color:#eef1ff;padding:.95rem 1.6rem;border-radius:14px;z-index:100;box-shadow:0 0 30px rgba(125,249,255,.35);transition:transform .4s ease}
 .toast.show{transform:translateX(-50%) translateY(0)}
 footer{position:relative;z-index:2;text-align:center;padding:2rem 6vw;color:#7c86b0;border-top:1px solid rgba(125,249,255,.12);font-size:.9rem}
+.rig-detail{perspective:1300px}
+.rig.open .rig-detail{perspective:1300px}
+.rig.open .detail-col{transform-style:preserve-3d;animation:colFlipIn .7s cubic-bezier(.2,.9,.25,1.15) both}
+.rig.open .detail-col:nth-child(1){animation-delay:.06s}
+.rig.open .detail-col:nth-child(2){animation-delay:.18s}
+@keyframes colFlipIn{0%{transform:translateX(-40px) rotateY(-24deg) rotateX(10deg);opacity:0}60%{opacity:1}100%{transform:none;opacity:1}}
+.rig.open .gpu-3d{animation:gpuFlipIn .95s cubic-bezier(.2,.85,.3,1.15) both;transform-style:preserve-3d}
+@keyframes gpuFlipIn{0%{transform:rotateY(-160deg) rotateX(24deg) translateZ(-40px);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+.rig.open .rig-detail h4,.rig.open .rig-detail p{animation:fadeUp2 .6s ease both;animation-delay:calc(var(--i,0)*.05s)}
+@keyframes fadeUp2{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.rig-detail h4:nth-of-type(1){--i:1}.rig-detail h4:nth-of-type(2){--i:2}.rig-detail p:nth-of-type(1){--i:3}.rig-detail p:nth-of-type(2){--i:4}
 @media(max-width:900px){h1{font-size:2.2rem}.hero{flex-direction:column;text-align:center;padding:3rem 5vw}.hero-actions{justify-content:center}.pc-cube{display:none}.rig-front{flex-direction:column;text-align:center}.rig-detail{grid-template-columns:1fr}.steps{grid-template-columns:1fr 1fr}.main-nav a{margin-left:1rem;font-size:.9rem}}
 @media(max-width:520px){.steps{grid-template-columns:1fr}}
