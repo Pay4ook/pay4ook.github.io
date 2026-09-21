@@ -1,82 +1,55 @@
 (function () {
   "use strict";
 
-  var RIGS = document.querySelectorAll(".rig");
-
-  function setOpen(rig, open) {
-    rig.classList.toggle("open", open);
-    var g = rig.querySelector(".rig-gpu");
-    if (g) g.classList.toggle("lit", open);
+  function openRig(r, o) {
+    r.classList.toggle("open", o);
+    var g = r.querySelector(".gpu-3d");
+    if (g) g.classList.toggle("lit", o);
+    var g2 = r.querySelector(".rig-side");
+    if (g2 && o) {
+      g2.style.transform = "rotateY(0deg)";
+    }
   }
 
-  RIGS.forEach(function (rig) {
-    var openBtn = rig.querySelector(".detail-btn");
-    var hideBtn = rig.querySelector(".hide-btn");
-    var front = rig.querySelector(".rig-front");
-
-    if (openBtn) {
-      openBtn.addEventListener("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        setOpen(rig, true);
-      });
-    }
-    if (hideBtn) {
-      hideBtn.addEventListener("click", function (e) {
-        e.preventDefault();
-        e.stopPropagation();
-        setOpen(rig, false);
-      });
-    }
-    if (front) {
-      front.addEventListener("click", function (e) {
-        if (e.target.closest("a,button")) return;
-        setOpen(rig, !rig.classList.contains("open"));
-      });
-    }
+  document.querySelectorAll(".rig").forEach(function (rig) {
+    var ob = rig.querySelector(".detail-btn");
+    var hb = rig.querySelector(".hide-btn");
+    if (ob) ob.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); openRig(rig, true); });
+    if (hb) hb.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); openRig(rig, false); });
   });
 
-  // ===== Параллакс видеокарты в открытой карточке =====
+  // параллакс объёмных блоков внутри раскрытой карточки
   document.addEventListener("mousemove", function (e) {
-    RIGS.forEach(function (rig) {
-      var gpu = rig.querySelector(".rig-gpu");
-      if (!gpu || !rig.classList.contains("open")) return;
-      var rect = rig.getBoundingClientRect();
-      var dx = (e.clientX - (rect.left + rect.width / 2)) / rect.width;
-      var dy = (e.clientY - (rect.top + rect.height / 2)) / rect.height;
-      gpu.style.transform = "translate3d(" + (dx * 22) + "px," + (dy * 18) + "px,0) rotateY(" + (dx * 16) + "deg) rotateX(" + (-dy * 12) + "deg)";
+    document.querySelectorAll(".rig.open .gpu-3d").forEach(function (g) {
+      var re = g.getBoundingClientRect();
+      var dx = (e.clientX - (re.left + re.width / 2)) / re.width;
+      var dy = (e.clientY - (re.top + re.height / 2)) / re.height;
+      g.style.transform = "translate3d(" + (dx * 14) + "px," + (dy * 12) + "px,0) rotateY(" + (dx * 14) + "deg) rotateX(" + (-dy * 10) + "deg)";
     });
   });
 
-  // ===== Штрих-переход между страницами (дёмп сквозь штору) =====
+  // мини-анимация перехода между страницами: штора
   var veil = document.createElement("div");
   veil.className = "veil";
-  document.body.appendChild(veil.version);
+  document.body.appendChild(veil);
+
   var leaving = false;
-
-  function forceLeave(href, e) {
-    if (leaving) return;
-    leaving = true;
-    e.preventDefault();
-    veil.classList.add("show");
-    setTimeout(function () {
-      window.location.href = href;
-    }, 380);
-  }
-
   document.addEventListener("click", function (e) {
     if (leaving) return;
-    var a = e.target.closest("a[href]");
+    var a = e.target.closest ? e.target.closest("a[href]") : null;
     if (!a) return;
     var href = a.getAttribute("href");
     if (!href) return;
     if (a.getAttribute("target")) return;
-    if (href.charAt(0) === "#") return;
+    if (href.charAt(0) === "#" || href.indexOf("mailto:") === 0) return;
     try {
       var u = new URL(href, location.href);
       if (u.origin !== location.origin) return;
-      forceLeave(u.href, e);
-    } catch (err) {}
+    } catch (err) { return; }
+    e.preventDefault();
+    leaving = true;
+    veil.classList.add("show");
+    setTimeout(function () { location.href = u.href; }, 340);
   });
 
   window.addEventListener("pageshow", function () {
