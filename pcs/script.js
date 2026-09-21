@@ -5,10 +5,6 @@
     r.classList.toggle("open", o);
     var g = r.querySelector(".gpu-3d");
     if (g) g.classList.toggle("lit", o);
-    var g2 = r.querySelector(".rig-side");
-    if (g2 && o) {
-      g2.style.transform = "rotateY(0deg)";
-    }
   }
 
   document.querySelectorAll(".rig").forEach(function (rig) {
@@ -18,13 +14,16 @@
     if (hb) hb.addEventListener("click", function (e) { e.preventDefault(); e.stopPropagation(); openRig(rig, false); });
   });
 
-  // параллакс объёмных блоков внутри раскрытой карточки
+  // плавный параллакс объёмных блоков внутри раскрытой карточки
   document.addEventListener("mousemove", function (e) {
     document.querySelectorAll(".rig.open .gpu-3d").forEach(function (g) {
       var re = g.getBoundingClientRect();
-      var dx = (e.clientX - (re.left + re.width / 2)) / re.width;
-      var dy = (e.clientY - (re.top + re.height / 2)) / re.height;
-      g.style.transform = "translate3d(" + (dx * 14) + "px," + (dy * 12) + "px,0) rotateY(" + (dx * 14) + "deg) rotateX(" + (-dy * 10) + "deg)";
+      if (!re.width || !re.height) { g.style.transform = "none"; return; }
+      var dx = (e.clientX - (re.left + re.width / 2)) / (re.width / 2);
+      var dy = (e.clientY - (re.top + re.height / 2)) / (re.height / 2);
+      dx = Math.max(-1, Math.min(1, dx));
+      dy = Math.max(-1, Math.min(1, dy));
+      g.style.transform = "translate3d(" + (dx * 10) + "px," + (dy * 8) + "px,0) rotateY(" + (dx * 10) + "deg) rotateX(" + (-dy * 7) + "deg)";
     });
   });
 
