@@ -8,11 +8,15 @@ document.querySelectorAll('.rig').forEach(rig=>{
   });
   if(hide) hide.addEventListener('click',()=>rig.classList.remove('open'));
   if(gpu){
-    document.addEventListener('mousemove',e=>{
+    rig.addEventListener('mousemove',e=>{
       const r=rig.getBoundingClientRect();
       const dx=(e.clientX-(r.left+r.width/2))/r.width;
       const dy=(e.clientY-(r.top+r.height/2))/r.height;
-      gpu.style.transform=`rotateY(${dx*22}deg) rotateX(${-dy*22}deg)`;
+      const dz=rig.classList.contains('open')?26:0;
+      gpu.style.transform=`rotateY(${dx*34}deg) rotateX(${-dy*30}deg) translateZ(${dz}px)`;
+    });
+    rig.addEventListener('mouseleave',()=>{
+      gpu.style.transform='none';
     });
   }
   const ord=rig.querySelector('.order-pc');
