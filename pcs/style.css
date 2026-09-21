@@ -75,7 +75,6 @@ h1 em{font-style:normal;color:var(--amber)}
 .rig-power{color:var(--dim);font-size:.8rem;margin-top:.35rem}
 .rig-ctrl{display:flex;align-items:center;gap:1.2rem;margin-top:1rem;flex-wrap:wrap}
 .rig-price{font-weight:800;color:var(--amber)}
-.detail-dot{width:8px;height:8px;background:var(--ambark?);}
 
 /* характеристики раскрытием */
 .rig-detail{display:grid;grid-template-columns:1fr 1fr;gap:2rem;padding:1.4rem 1.6rem 1.8rem;border-top:1px dashed var(--line);background:rgba(0,0,0,.12)}
@@ -84,13 +83,18 @@ h1 em{font-style:normal;color:var(--amber)}
 .detail-col h4{font-size:.72rem;letter-spacing:.14em;color:var(--amber);text-transform:uppercase;margin:1rem 0 .35rem}
 .detail-col h4:first-child{margin-top:0}
 .detail-col p{color:var(--dim);font-size:.84rem}
-.gpu-3d{height:120px;display:flex;align-items:center;justify-content:flex-start;padding-left:22px;position:relative;border:1px solid var(--line);border-radius:2px;background:linear-gradient(150deg,#20232c,#17181d);margin-bottom:.9rem}
-.gpu-3d::before{content:"";position:absolute;left:10px;top:50%;transform:translateY(-50%);width:6px;height:46%;background:var(--amber)}
-.gpu-3d[data-gpu="rtx4090"]::before{background:var(--rust)}
-.gpu-3d[data-gpu="rx7800xt"]::before{background:var(--lime)}
-.gpu-3d[data-gpu="rtx4070s"]::before{background:var(--amber)}
-.gpu-label{font-family:'Unbounded',sans-serif;font-weight:600;font-size:.82rem;letter-spacing:.03em;color:var(--ink);z-index:1}
-.gpu-3d::after{content:"";position:absolute;right:14px;top:6px;width:52px;height:14px;background:repeating-linear-gradient(90deg,var(--line) 0 4px,transparent 4px 8px)}
+
+/* ============ 3D-КУБ В HERO ============ */
+.gradient-text{background:linear-gradient(92deg,var(--ink) 30%,var(--amber) 70%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.pc-cube{flex:0 0 320px;height:320px;position:relative;perspective:900px;z-index:2;display:flex;align-items:center;justify-content:center}
+.cube-inner{position:relative;width:170px;height:170px;transform-style:preserve-3d;animation:cubeSpin 16s linear infinite}
+.face{position:absolute;width:170px;height:170px;display:flex;align-items:center;justify-content:center;font-family:'Unbounded',sans-serif;font-weight:900;font-size:1.35rem;letter-spacing:.06em;color:var(--ink);background:rgba(27,29,36,.78);border:1px solid var(--line);backdrop-filter:blur(2px)}
+.face::before{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(233,231,224,.06),transparent 55%)}
+.face.front{transform:translateZ(85px)}.face.back{transform:rotateY(180deg) translateZ(85px)}
+.face.right{transform:rotateY(90deg) translateZ(85px)}.face.left{transform:rotateY(-90deg) translateZ(85px)}
+.face.top{transform:rotateX(90deg) translateZ(85px)}.face.bottom{transform:rotateX(-90deg) translateZ(85px)}
+@keyframes cubeSpin{to{transform:rotateX(-18deg) rotateY(360deg)}}
+@media(max-width:900px){.pc-cube{display:none}}
 
 /* ============ КАК ЗАКАЗАТЬ / ШАГИ ============ */
 .how{position:relative;z-index:2;padding:3rem 6vw}
@@ -117,6 +121,42 @@ footer p{max-width:52ch;line-height:1.7}
 .toast{position:fixed;bottom:1.4rem;left:50%;transform:translate(-50%,130%);background:var(--amber);color:#111;font-size:.82rem;padding:.8rem 1.3rem;border-radius:2px;z-index:100;transition:transform .35s cubic-bezier(.2,.8,.3,1);font-weight:700}
 .toast.show{transform:translate(-50%,0)}
 
+/* ============ КОМПОНЕНТЫ: чипы на лице, 3D-блоки в деталях ============ */
+.rig-front{display:flex;align-items:center;gap:2.2rem;padding:1.4rem 1.6rem;flex-wrap:wrap}
+.rig-front-col{flex:1 1 340px;min-width:260px}
+.rig-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:.9rem}
+.chip{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.08em;padding:.28rem .7rem;border:1px solid var(--line);border-radius:2px;color:var(--dim);background:#101116;position:relative;overflow:hidden}
+.chip::before{content:"";position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--amber)}
+.chip:nth-child(2n)::before{background:var(--lime)}
+.chip:nth-child(3n)::before{background:var(--rust)}
+.rig-side{flex:0 1 240px;min-width:200px;perspective:700px}
+.gpu-3d{height:130px;display:flex;align-items:center;justify-content:flex-start;padding-left:22px;position:relative;border:1px solid var(--line);border-radius:2px;background:linear-gradient(150deg,#23262f,#15161b);margin-bottom:.4rem;transform-style:preserve-3d;transition:border-color .3s,box-shadow .3s}
+.gpu-3d.lit{border-color:var(--amber);box-shadow:0 0 34px rgba(255,179,0,.16),inset 0 0 22px rgba(255,179,0,.05)}
+.gpu-3d::before{content:"";position:absolute;left:10px;top:50%;transform:translateY(-50%);width:6px;height:46%;background:var(--amber)}
+.gpu-3d[data-gpu="rtx4090"]::before{background:var(--rust)}.gpu-3d[data-gpu="rtx4080s"]::before{background:var(--rust)}
+.gpu-3d[data-gpu="rx7800xt"]::before{background:var(--lime)}
+.gpu-3d[data-gpu="rtx4070s"]::before{background:var(--amber)}
+.gpu-3d[data-gpu="rtx4060"]::before{background:var(--amber)}
+.gpu-label{font-family:'Unbounded',sans-serif;font-weight:600;font-size:.86rem;letter-spacing:.03em;color:var(--ink);z-index:1}
+.gpu-3d::after{content:"";position:absolute;right:14px;top:6px;width:52px;height:14px;background:repeating-linear-gradient(90deg,var(--line) 0 4px,transparent 4px 8px)}
+
+/* объёмные блоки каждого компонента */
+.comps{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+.comp{position:relative;border:1px solid var(--line);border-radius:2px;padding:1.1rem 1.2rem;background:linear-gradient(160deg,#1b1e26,#14151a);overflow:hidden;transform-style:preserve-3d;transition:transform .25s,border-color .25s,box-shadow .25s}
+.comp:hover{transform:translateY(-3px) rotateX(2deg);border-color:var(--faint);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.comp::after{content:"";position:absolute;right:-20px;top:-20px;width:80px;height:80px;border:1px solid rgba(233,231,224,.08);border-radius:50%;pointer-events:none}
+.comp-top{display:flex;align-items:baseline;justify-content:space-between;gap:.6rem;margin-bottom:.5rem}
+.comp-name{font-size:.66rem;letter-spacing:.16em;color:var(--faint);text-transform:uppercase}
+.comp-val{font-family:'Unbounded',sans-serif;font-weight:600;font-size:.92rem;color:var(--ink);text-align:right}
+.comp p{color:var(--dim);font-size:.78rem;line-height:1.5}
+.comp-gpu .comp-val{color:var(--amber)}
+.comp-cpu .comp-val{color:var(--lime)}
+.comp-ram .comp-val{color:#8fc9ff}
+.comp-ssd .comp-val{color:#ff9d5c}
+.comp-psu .comp-val{color:var(--rust)}
+.comp-cool .comp-val{color:var(--amber)}
+.detail-actions{margin-top:1.4rem;display:flex;justify-content:flex-end}
+
 /* ============ АДАПТИВ ============ */
 @media(max-width:900px){
   .hero{flex-direction:column;text-align:left;padding:3rem 6vw}
@@ -130,14 +170,10 @@ footer p{max-width:52ch;line-height:1.7}
 @media(max-width:520px){.steps{grid-template-columns:1fr}}
 
 /* ============ Штора перехода между страницами ============ */
-.veil{position:fixed;inset:0;z-index:2000;background:#05060a;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility .35s}
-.veil.show{opacity:1;visibility:visible;pointer-events:auto}
-.veil::after{content:"PCMASTER";position:absolute;left:50%;top:48%;transform:translate(-50%,-50%);font-family:'Unbounded',sans-serif;font-size:clamp(1rem,3vw,1.8rem);letter-spacing:.28em;color:var(--amber);opacity:0;animation:veilPulse .5s ease .15s forwards}
-@keyframes veilPulse{to{opacity:.9;letter-spacing:.1em}}
-
-/* ===== Переход между страницами: штора ===== */
 .veil{position:fixed;inset:0;z-index:3000;background:#0b0c11;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .38s ease,visibility .38s}
 .veil.show{opacity:1;visibility:visible;pointer-events:auto}
+.veil::before{content:"PCMASTER";position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);font-family:'Unbounded',sans-serif;font-size:clamp(1rem,3vw,1.8rem);letter-spacing:.28em;color:var(--amber);opacity:0;transition:opacity .3s}
+.veil.show::before{opacity:.85}
 .veil::after{content:"";position:absolute;left:50%;top:50%;width:56px;height:56px;border:2px solid transparent;border-top-color:var(--amber);border-radius:50%;opacity:0;transform:translate(-50%,-50%) rotate(0);transition:opacity .3s}
 .veil.show::after{opacity:1;animation:spin .9s linear infinite}
 @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
