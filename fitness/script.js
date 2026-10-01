@@ -248,6 +248,9 @@ document.getElementById("bookingForm").addEventListener("submit", function (e) {
 
 
 
+  var hpField = document.getElementById("bf-website");
+  if (hpField && hpField.value) return;
+
   if (!name || !phone || !program || !day) {
 
     showToast("Заполни все поля формы!");
