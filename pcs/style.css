@@ -188,3 +188,15 @@ footer p{max-width:52ch;line-height:1.7}
 .veil::after{content:"";position:absolute;left:50%;top:50%;width:56px;height:56px;border:2px solid transparent;border-top-color:var(--amber);border-radius:50%;opacity:0;transform:translate(-50%,-50%) rotate(0);transition:opacity .3s}
 .veil.show::after{opacity:1;animation:spin .9s linear infinite}
 @keyframes spin{to{transform:translate(-50%,-50%) rotate(360deg)}}
+
+/* Блок заявки / CTA */
+.cta-block{max-width:1080px;margin:64px auto 24px;padding:48px 32px;text-align:center;
+  border:1px solid rgba(255,255,255,.12);border-radius:20px;
+  background:linear-gradient(160deg,rgba(122,92,255,.14),rgba(0,217,255,.06));}
+.cta-block h2{margin:0 0 12px;font-size:clamp(24px,3.4vw,38px);line-height:1.15;}
+.cta-sub{margin:0 auto 26px;max-width:620px;opacity:.72;line-height:1.6;}
+.cta-btn{display:inline-block;padding:16px 34px;font-weight:700;text-decoration:none;}
+.contact-cta{max-width:720px;margin:32px auto 12px;text-align:center;}
+.contact-cta h2{margin:0 0 10px;}
+.contact-cta p{margin:0 0 22px;opacity:.75;}
+@media (max-width:640px){.cta-block{padding:34px 20px;margin-top:44px;}}
