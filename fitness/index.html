@@ -572,6 +572,7 @@
       </div>
 
       <form class="booking-form reveal" id="bookingForm">
+        <input type="text" id="bf-website" class="hp-field" tabindex="-1" autocomplete="off" aria-hidden="true">
 
         <div class="form-row">
 
@@ -717,7 +718,7 @@
 
     <h3 class="pay-title">Оплата абонемента</h3>
 
-    <p class="pay-sub">Демо-режим — платёж не настоящий</p>
+    <p class="pay-sub">Оплата без карты — мы свяжемся с вами в Telegram</p>
 
     <div class="pay-plan" id="payPlan">—</div>
 
@@ -725,27 +726,19 @@
 
       <div class="form-row">
 
-        <input type="text" placeholder="Номер карты" id="pm-card" maxlength="19" inputmode="numeric">
-
-      </div>
-
-      <div class="form-row two">
-
-        <input type="text" placeholder="ММ/ГГ" id="pm-exp" maxlength="5" inputmode="numeric">
-
-        <input type="text" placeholder="CVC" id="pm-cvc" maxlength="3" inputmode="numeric">
+        <input type="text" placeholder="Имя" id="pm-name">
 
       </div>
 
       <div class="form-row">
 
-        <input type="text" placeholder="Имя на карте" id="pm-name">
+        <input type="tel" placeholder="Телефон для связи" id="pm-card">
 
       </div>
 
-      <button class="btn btn-accent btn-block" onclick="doPayment()">💳 Оплатить <span id="payAmount">—</span> ₽</button>
+      <button class="btn btn-accent btn-block" onclick="doPayment()">Отправить заявку <span id="payAmount">—</span> ₽</button>
 
-      <p class="form-note">🔒 Демо-сайт: данные никуда не отправляются и ничего не списывается.</p>
+      <p class="form-note">Без карт. Найдём бота и оплатим без показательным картой или предоплатой.</p>
 
     </div>
 
@@ -763,7 +756,7 @@
 
     <h3>Оплата прошла!</h3>
 
-    <p>Это была демо-оплата в примере сайта. На реальном сайте здесь подключили бы настоящий платёжный шлюз.</p>
+    <p>Заявка отправлена в Telegram. Администратор свяжется с вами и подтвердит заплану на занятие.</p>
 
     <button class="btn btn-accent" onclick="closeSuccess()">Отлично</button>
 
