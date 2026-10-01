@@ -3,31 +3,41 @@
   <url>
     <loc>https://pay4ook.github.io/fitness/</loc>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://pay4ook.github.io/fitness/#prices</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://pay4ook.github.io/fitness/#programs</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://pay4ook.github.io/fitness/#schedule</loc>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pay4ook.github.io/fitness/#gallery</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://pay4ook.github.io/fitness/#trainers</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pay4ook.github.io/fitness/#team</loc>
-    <changefreq>weekly</changefreq>
+    <loc>https://pay4ook.github.io/fitness/#why</loc>
+    <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://pay4ook.github.io/fitness/#contact</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <loc>https://pay4ook.github.io/fitness/#pricing</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://pay4ook.github.io/fitness/#faq</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://pay4ook.github.io/fitness/#booking</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
 </urlset>
