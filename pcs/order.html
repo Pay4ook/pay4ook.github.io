@@ -29,14 +29,14 @@
 <section class="hero hero-sm">
   <div class="hero-copy">
     <h1>Заказать сборку</h1>
-    <p>Выберите конфигурацию, оставьте контакты — перезвоним в течение часа (демо).</p>
+    <p>Выберите конфигурацию, оставьте контакты — ответим в Telegram без регистрации</p>
   </div>
 </section>
 <section class="order">
   <div class="rig open">
     <div class="rig-front">
       <h3>Форма заказа</h3>
-      <p class="rig-power">это демо — данные никуда не отправляются</p>
+      <p class="rig-power">заявка уйдёт в Telegram</p>
     </div>
     <div class="rig-detail">
       <div class="detail-col">
@@ -45,7 +45,11 @@
           <option value="1">NOVA START — от 89 990 ₽</option><option value="2">ORBIT X — от 159 990 ₽</option><option value="3">NEBULA PRO — от 129 990 ₽</option><option value="4">STARFORGE X — от 199 990 ₽</option><option value="5">SUPERNOVA LEGEND — от 299 990 ₽</option><option value="6">COSMOS TITAN — от 389 990 ₽</option>
         </select>
         <br><br>
-        <button class="btn btn-primary" id="order-btn">Заказать (демо)</button>
+        <input class="order-input" type="text" id="order-name" placeholder="Имя" autocomplete="name">
+        <br><br>
+        <input class="order-input" type="tel" id="order-phone" placeholder="+7 ... — телефон" autocomplete="tel">
+        <br><br>
+        <button class="btn btn-primary" id="order-btn">Заказать сборку</button>
       </div>
     </div>
   </div>
@@ -82,5 +86,6 @@
 
 <div class="toast" id="toast"></div>
 <script src="script.js?v=5"></script>
+<script src="order.js"></script>
 </body>
 </html>
