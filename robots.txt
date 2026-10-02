@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /zerna/
 
 Sitemap: https://pay4ook.github.io/sitemap.xml
