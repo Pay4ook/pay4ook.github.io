@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Заказ сборки — PCMASTER</title>
 <meta name="description" content="Закажите игровой ПК: выберите сборку и оставьте контакты.">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=7">
 <link rel="canonical" href="https://pay4ook.github.io/pcs/order.html">
 <link rel="icon" type="image/png" sizes="64x64" href="img/favicon.png">
 <link rel="apple-touch-icon" href="img/favicon.png">
@@ -82,33 +82,32 @@
     <a href="about.html"><span>07</span>О компании</a>
     <a href="contacts.html"><span>08</span>Контакты</a>
   </nav>
-  <a class="btn btn-accent drawer-cta" href="https://t.me/Teller12p_bot?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D1%85%D0%BE%D1%87%D1%83%20%D0%BE%D0%B1%D1%81%D1%83%D0%B4%D0%B8%D1%82%D1%8C%20%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D1%83%20%D0%9F%D0%9A">Написать сборку в Telegram</a>
+  <a class="btn btn-accent drawer-cta" href="order.html">Открыть форму заказа</a>
 </div>
 <div class="drawer-ov" id="drawerOv"></div>
 <section class="hero hero-sm">
   <div class="hero-copy">
     <h1>Заказать сборку</h1>
-    <p>Выберите конфигурацию, оставьте контакты — ответим в Telegram без регистрации</p>
+    <p>Демонстрационная форма: показывает приём заявки. Данные никуда не отправляются.</p>
   </div>
 </section>
 <section class="order">
   <div class="rig open">
     <div class="rig-front">
       <h3>Форма заказа</h3>
-      <p class="rig-power">заявка уйдёт в Telegram</p>
+      <p class="rig-power">демо-режим: заявка никуда не отправляется</p>
     </div>
     <div class="rig-detail">
       <div class="detail-col">
         <h4>Ваша сборка</h4>
-        <select id="rig-select">
-          <option value="1">NOVA START — от 89 990 ₽</option><option value="2">ORBIT X — от 159 990 ₽</option><option value="3">NEBULA PRO — от 129 990 ₽</option><option value="4">STARFORGE X — от 199 990 ₽</option><option value="5">SUPERNOVA LEGEND — от 299 990 ₽</option><option value="6">COSMOS TITAN — от 389 990 ₽</option>
-        </select>
+        <select id="rig-select"><option value="1">NOVA START — от 89 990 ₽</option><option value="2">NEBULA PRO — от 129 990 ₽</option><option value="3">ORBIT X — от 159 990 ₽</option><option value="4">STARFORGE X — от 199 990 ₽</option><option value="5">SUPERNOVA LEGEND — от 299 990 ₽</option><option value="6">COSMOS TITAN — от 389 990 ₽</option></select>
         <br><br>
         <input class="order-input" type="text" id="order-name" placeholder="Имя" autocomplete="name">
         <br><br>
         <input class="order-input" type="tel" id="order-phone" placeholder="+7 ... — телефон" autocomplete="tel">
         <br><br>
         <button class="btn btn-primary" id="order-btn">Заказать сборку</button>
+        <p class="form-note" id="order-status" style="margin-top:1rem">Демо-режим: поля проверяются, но заявка никуда не отправляется.</p>
       </div>
     </div>
   </div>
@@ -117,7 +116,7 @@
 <section class="cta-block">
   <h2>Хотите сборку под ваши игры?</h2>
   <p class="cta-sub">Опишите бюджет и игры — ответим в Telegram, без регистрации и предоплаты.</p>
-  <a class="btn btn-accent cta-btn" href="https://t.me/Teller12p_bot?text=%D0%97%D0%B4%D1%80%D0%B0%D0%B2%D1%81%D1%82%D0%B2%D1%83%D0%B9%D1%82%D0%B5%2C%20%D1%85%D0%BE%D1%87%D1%83%20%D0%BE%D0%B1%D1%81%D1%83%D0%B4%D0%B8%D1%82%D1%8C%20%D1%81%D0%B1%D0%BE%D1%80%D0%BA%D1%83%20%D0%9F%D0%9A">Написать сборку в Telegram</a>
+  <a class="btn btn-accent cta-btn" href="order.html">Открыть форму заказа</a>
 </section>
 <footer>
   <div class="foot-grid">
@@ -140,11 +139,11 @@
     </div>
   </div>
   <p class="foot-note">PCMASTER — игровые ПК на заказ с 2009 года. Соберём, настроим, доставим.</p>
-  <p class="foot-note foot-build">Сайт и Telegram-бот сделал @Teller12p_bot</p>
+  <p class="foot-note foot-build">Демо-сайт для портфолио · сделал @Teller12p_bot</p>
 </footer>
 
 <div class="toast" id="toast"></div>
-<script src="script.js?v=6"></script>
+<script src="script.js?v=7"></script>
 <script src="order.js"></script>
 </body>
 </html>

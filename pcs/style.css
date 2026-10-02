@@ -234,3 +234,12 @@ body.nav-open{overflow:hidden}
 @media(max-width:900px){
   .burger{display:block}
 }
+
+/* ============ ПРАВКИ: акценты, ссылки на сборки, шаги ============ */
+h1 .hl{color:var(--amber)}
+.rig-link{color:inherit;transition:color .18s}
+.rig-link:hover{color:var(--amber)}
+.rig-order{white-space:nowrap}
+.step h4{font-family:'Unbounded',sans-serif;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:.5rem;letter-spacing:.01em}
+.step p{line-height:1.55}
+@media(max-width:900px){.rig-ctrl{gap:.9rem}.rig-ctrl .rig-order{flex:1 1 100%;text-align:center}}
