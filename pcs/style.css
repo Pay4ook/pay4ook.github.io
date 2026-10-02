@@ -200,3 +200,37 @@ footer p{max-width:52ch;line-height:1.7}
 .contact-cta h2{margin:0 0 10px;}
 .contact-cta p{margin:0 0 22px;opacity:.75;}
 @media (max-width:640px){.cta-block{padding:34px 20px;margin-top:44px;}}
+
+/* ============ МОБИЛЬНОЕ МЕНЮ (бургер) ============ */
+.burger{display:none;width:46px;height:40px;border:1px solid var(--line);background:rgba(255,255,255,.02);border-radius:10px;position:relative;cursor:pointer;flex:none}
+.burger span{position:absolute;left:12px;width:20px;height:2px;background:var(--ink);border-radius:2px;transition:transform .22s ease,opacity .22s ease}
+.burger span:nth-child(1){top:14px}
+.burger span:nth-child(2){top:24px}
+.burger.open span:nth-child(1){transform:translateY(5px) rotate(45deg)}
+.burger.open span:nth-child(2){transform:translateY(-5px) rotate(-45deg)}
+.burger:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+
+.drawer{position:fixed;top:0;left:0;right:0;z-index:2400;padding:1.1rem 6vw 2.6rem;background:var(--graphite);
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:52px 52px;background-position:center;border-bottom:2px solid var(--amber);
+  transform:translateY(-102%);opacity:0;visibility:hidden;pointer-events:none;
+  transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .25s ease,visibility .3s;max-height:100vh;overflow-y:auto}
+.drawer.open{transform:none;opacity:1;visibility:visible;pointer-events:auto}
+.drawer-top{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:1.8rem}
+.drawer-kicker{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)}
+.drawer-close{border:1px solid var(--line);background:none;color:var(--dim);font-family:inherit;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.55rem 1rem;border-radius:8px;cursor:pointer}
+.drawer-close:hover{color:var(--ink);border-color:var(--amber)}
+.drawer-nav{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.drawer-nav a{display:flex;align-items:baseline;gap:1rem;padding:1.05rem .2rem;border-bottom:1px solid var(--line);
+  font-family:'Unbounded',sans-serif;font-weight:600;font-size:1.05rem;letter-spacing:.01em;color:var(--ink);transition:color .18s,padding-left .18s}
+.drawer-nav a span{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.14em;color:var(--faint);min-width:2ch}
+.drawer-nav a:hover,.drawer-nav a:active{padding-left:.6rem;color:var(--amber)}
+.drawer-nav a.on{color:var(--amber)}
+.drawer-cta{margin-top:1.9rem;display:inline-block;text-align:center}
+.drawer-ov{position:fixed;inset:0;z-index:2300;background:rgba(5,6,9,.72);backdrop-filter:blur(2px);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .25s,visibility .25s}
+.drawer-ov.open{opacity:1;visibility:visible;pointer-events:auto}
+body.nav-open{overflow:hidden}
+
+@media(max-width:900px){
+  .burger{display:block}
+}

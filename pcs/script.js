@@ -66,4 +66,52 @@
     veil.classList.remove("show");
     leaving = false;
   });
+
+  /* ---------- Мобильное меню ---------- */
+  (function () {
+    var burger = document.getElementById("burger");
+    var drawer = document.getElementById("drawer");
+    var ov = document.getElementById("drawerOv");
+    var closeBtn = document.getElementById("drawerClose");
+    if (!burger || !drawer || !ov) return;
+
+    function open() {
+      drawer.classList.add("open");
+      ov.classList.add("open");
+      burger.classList.add("open");
+      burger.setAttribute("aria-expanded", "true");
+      burger.setAttribute("aria-label", "Закрыть меню");
+      drawer.setAttribute("aria-hidden", "false");
+      document.body.classList.add("nav-open");
+    }
+
+    function close() {
+      drawer.classList.remove("open");
+      ov.classList.remove("open");
+      burger.classList.remove("open");
+      burger.setAttribute("aria-expanded", "false");
+      burger.setAttribute("aria-label", "Открыть меню");
+      drawer.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("nav-open");
+    }
+
+    burger.addEventListener("click", function () {
+      if (drawer.classList.contains("open")) close(); else open();
+    });
+    if (closeBtn) closeBtn.addEventListener("click", close);
+    ov.addEventListener("click", close);
+
+    drawer.querySelectorAll("a").forEach(function (a) {
+      a.addEventListener("click", close);
+    });
+
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && drawer.classList.contains("open")) close();
+    });
+
+    window.addEventListener("resize", function () {
+      if (window.innerWidth > 900 && drawer.classList.contains("open")) close();
+    });
+  })();
+
 })();
