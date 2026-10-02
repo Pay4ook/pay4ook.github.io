@@ -529,11 +529,11 @@ footer{background:var(--ink);color:var(--cream);padding:clamp(50px,7vw,80px) 0 3
     if(phone.replace(/\D/g,'').length < 10){ alert('Введите полный номер телефона'); return; }
     if(!consent){ alert('Нужно согласие на обработку данных'); return; }
 
-    form.innerHTML =
+form.innerHTML =
       '<div class="done">' +
         '<svg viewBox="0 0 56 56" fill="none"><circle cx="28" cy="28" r="26" fill="#b9cbc2"/><path d="M17 29l8 8 15-16" stroke="#4b332a" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>' +
-        '<b>Заявка принята</b>' +
-        '<p>' + name.replace(/</g,"&lt;") + ', мы перезвоним на ' + phone.replace(/</g,"&lt;") + '.</p>' +
+        '<b>Это демо-версия</b>' +
+        '<p>Заказ не отправляется, ничего не оплачивается и данные никуда не передаются. Сайт собран для портфолио.</p>' +
       '</div>';
   });
 })();
