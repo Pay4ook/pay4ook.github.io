@@ -56,7 +56,7 @@ h1 em{font-style:normal;color:var(--amber)}
 /* ============ КНОПКИ / ШТАМПЫ ============ */
 .btn{display:inline-block;padding:.9rem 1.6rem;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:.82rem;letter-spacing:.04em;cursor:pointer;border:1px solid var(--line);border-radius:2px;color:var(--ink);background:transparent;transition:transform .12s,background .18s,box-shadow .18s}
 .btn:hover{background:rgba(233,231,224,.06)}
-.btn:active{transform:translateY(1px)}
+.btn:active{transform:translateY(1px) scale(.975);transition-duration:.07s}
 .btn-primary{background:var(--amber);border-color:var(--amber);color:#111}
 .btn-primary:hover{background:transparent;box-shadow:inset 0 0 0 2px var(--amber);color:var(--amber)}
 .btn-dark{border-color:var(--line);color:var(--dim)}
@@ -243,3 +243,8 @@ h1 .hl{color:var(--amber)}
 .step h4{font-family:'Unbounded',sans-serif;font-size:1rem;font-weight:600;color:var(--ink);margin-bottom:.5rem;letter-spacing:.01em}
 .step p{line-height:1.55}
 @media(max-width:900px){.rig-ctrl{gap:.9rem}.rig-ctrl .rig-order{flex:1 1 100%;text-align:center}}
+
+/* press feedback */
+.btn, button, .btn-primary, .btn-dark { transition: transform .16s cubic-bezier(.2,.8,.3,1), background .16s ease, color .16s ease, box-shadow .16s ease, border-color .16s ease; }
+.btn:active, .btn-primary:active, .btn-dark:active { transform: translateY(1px) scale(.975); transition-duration: .07s; }
+a:focus-visible, button:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }

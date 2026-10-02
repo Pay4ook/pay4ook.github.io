@@ -50,7 +50,7 @@ const DAY_NAMES = {
   thu: "Четверг", fri: "Пятница", sat: "Суббота", sun: "Воскресенье"
 };
 
-const BOT = "https://t.me/Teller12p_bot";
+const BOT = "https://t.me/Pay4o0k333";
 
 const schedList = document.getElementById("schedList");
 const toast = document.getElementById("toast");
