@@ -120,4 +120,8 @@
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-</urlset>
+  <url>
+    <loc>https://pay4ook.github.io/zakazy/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url></urlset>
