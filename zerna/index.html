@@ -87,11 +87,14 @@ header{position:sticky;top:0;z-index:50;background:rgba(244,232,219,.88);backdro
   display:inline-flex;align-items:center;justify-content:center;gap:9px;
   padding:14px 26px;border-radius:999px;font-size:14px;font-weight:500;
   background:var(--ink);color:var(--cream);border:0;cursor:pointer;
-  transition:transform .18s ease,background .18s ease;
+  transition:transform .16s cubic-bezier(.2,.8,.3,1),background .16s ease,box-shadow .16s ease;
 }
-.btn:hover{transform:translateY(-2px);background:#3a251e}
+.btn:hover{transform:translateY(-2px);background:#3a251e;box-shadow:0 10px 24px -14px rgba(75,51,42,.9)}
+.btn:active{transform:translateY(1px) scale(.975);box-shadow:none;transition-duration:.07s}
 .btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px rgba(75,51,42,.35)}
 .btn.ghost:hover{background:rgba(75,51,42,.06)}
+.btn.ghost:active{background:rgba(75,51,42,.14);transform:translateY(1px) scale(.975)}
+a:focus-visible,button:focus-visible{outline:2.5px solid var(--clay);outline-offset:3px}
 
 /* ---------- hero ---------- */
 .hero{position:relative;padding:clamp(46px,7vw,92px) 0 clamp(58px,8vw,104px);overflow:hidden}

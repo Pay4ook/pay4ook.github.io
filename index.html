@@ -92,10 +92,16 @@ hr{border:0;border-top:1px solid var(--line);margin:0}
   display:inline-flex;align-items:center;justify-content:center;gap:9px;
   padding:13px 24px;border-radius:999px;font-size:14px;font-weight:500;
   background:var(--ink);color:#f6f4ee;border:0;cursor:pointer;
-  transition:transform .18s ease,background .18s ease;
+  transition:transform .16s cubic-bezier(.2,.8,.3,1),background .16s ease,box-shadow .16s ease;
 }
-.btn:hover{transform:translateY(-2px);background:#38352f}
+.btn:hover{transform:translateY(-2px);background:#38352f;box-shadow:0 10px 24px -14px rgba(34,32,29,.85)}
+.btn:active{transform:translateY(1px) scale(.975);box-shadow:none;transition-duration:.07s}
 .btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px rgba(34,32,29,.3)}
+.btn.ghost:hover{background:rgba(34,32,29,.06)}
+.btn.ghost:active{background:rgba(34,32,29,.12);transform:translateY(1px) scale(.975)}
+.contact .btn.ghost:hover{background:rgba(246,244,238,.1)}
+.contact .btn.ghost:active{background:rgba(246,244,238,.2)}
+a:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px}
 
 /* hero */
 .hero{padding:clamp(52px,7.5vw,96px) 0 clamp(46px,6vw,76px)}
@@ -118,6 +124,7 @@ hr{border:0;border-top:1px solid var(--line);margin:0}
   box-shadow:0 1px 2px rgba(34,32,29,.04);
 }
 .work:hover{transform:translateY(-4px);box-shadow:0 22px 44px -30px rgba(34,32,29,.55)}
+.work:active{transform:translateY(-1px) scale(.99);transition-duration:.07s}
 .pv{height:172px;padding:20px;display:flex;flex-direction:column;justify-content:space-between}
 .pv .tag{align-self:flex-start;font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
 .pv .word{font-size:25px;font-weight:600;line-height:1.1}
