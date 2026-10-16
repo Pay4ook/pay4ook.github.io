@@ -1,0 +1,52 @@
+{
+ "gym": [
+  "err",
+  "HTTPError",
+  "HTTP Error 403: Forbidden"
+ ],
+ "iron": [
+  "err",
+  "HTTPError",
+  "HTTP Error 403: Forbidden"
+ ],
+ "train": [
+  "err",
+  "HTTPError",
+  "HTTP Error 403: Forbidden"
+ ],
+ "run": [
+  "err",
+  "HTTPError",
+  "HTTP Error 403: Forbidden"
+ ],
+ "lift": [
+  "err",
+  "HTTPError",
+  "HTTP Error 403: Forbidden"
+ ],
+ "sweat": [
+  "err",
+  "HTTPError",
+  "HTTP Error 403: Forbidden"
+ ],
+ "motion": [
+  "err",
+  "HTTPError",
+  "HTTP Error 403: Forbidden"
+ ],
+ "strength": [
+  "err",
+  "HTTPError",
+  "HTTP Error 403: Forbidden"
+ ],
+ "cardio": [
+  "err",
+  "HTTPError",
+  "HTTP Error 403: Forbidden"
+ ],
+ "active": [
+  "err",
+  "HTTPError",
+  "HTTP Error 403: Forbidden"
+ ]
+}
