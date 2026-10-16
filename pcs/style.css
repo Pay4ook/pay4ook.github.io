@@ -131,61 +131,66 @@ h1 {
 /* ========== 3D PC CASE ========== */
 .hero-3d { perspective: 1000px; display: flex; justify-content: center; align-items: center; }
 .pc-case {
-  width: 320px; height: 280px; position: relative;
+  width: 400px; height: 350px; position: relative;
   transform-style: preserve-3d;
   animation: pcFloat 8s ease-in-out infinite;
+  filter: drop-shadow(0 30px 60px rgba(0,0,0,0.5));
 }
 @keyframes pcFloat {
   0%, 100% { transform: rotateX(-5deg) rotateY(-25deg) translateY(0); }
   50% { transform: rotateX(-5deg) rotateY(-15deg) translateY(-15px); }
 }
 .pc-top, .pc-front, .pc-side {
-  position: absolute; background: var(--bg3); border: 1px solid var(--border);
+  position: absolute; background: var(--bg3); border: 1px solid #444;
 }
 .pc-top {
-  width: 240px; height: 160px;
-  top: 0; left: 40px;
+  width: 300px; height: 200px;
+  top: 0; left: 50px;
   transform: rotateX(90deg) translateZ(0px);
 }
 .pc-front {
-  width: 240px; height: 160px;
-  top: 80px; left: 40px;
+  width: 300px; height: 200px;
+  top: 100px; left: 50px;
 }
 .pc-side {
-  width: 160px; height: 160px;
-  top: 80px; left: 200px;
+  width: 200px; height: 200px;
+  top: 100px; left: 250px;
   transform: rotateY(90deg) translateZ(0px);
 }
 .pc-window {
-  width: 140px; height: 140px; margin: 10px;
-  background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
-  border: 1px solid var(--border); border-radius: 4px;
+  width: 170px; height: 170px; margin: 15px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08), transparent);
+  border: 1px solid #555; border-radius: 4px;
+  box-shadow: inset 0 0 30px rgba(255,255,255,0.03);
 }
 .pc-gpu-visual {
-  width: 100px; height: 30px; margin: 10px;
-  background: var(--bg4); border: 1px solid var(--border);
+  width: 130px; height: 40px; margin: 15px;
+  background: linear-gradient(135deg, #2a2a2a, #1a1a1a);
+  border: 1px solid #555;
   border-radius: 3px;
+  box-shadow: 0 0 15px rgba(255,255,255,0.05);
 }
 .pc-ram-visual {
-  display: flex; gap: 4px; margin: 10px;
+  display: flex; gap: 5px; margin: 15px;
 }
 .pc-ram-visual::before, .pc-ram-visual::after {
-  content: ''; width: 4px; height: 80px; background: var(--bg4);
-  border: 1px solid var(--border); border-radius: 1px;
+  content: ''; width: 5px; height: 100px; background: linear-gradient(180deg, #333, #222);
+  border: 1px solid #555; border-radius: 1px;
 }
 .pc-fan {
-  position: absolute; width: 40px; height: 40px;
-  border: 2px solid var(--border); border-radius: 50%;
+  position: absolute; width: 55px; height: 55px;
+  border: 2px solid #555; border-radius: 50%;
   animation: fanSpin 3s linear infinite;
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
 }
-.pc-fan:nth-child(1) { top: 10px; left: 10px; }
-.pc-fan:nth-child(2) { top: 10px; right: 10px; }
+.pc-fan:nth-child(1) { top: 15px; left: 15px; }
+.pc-fan:nth-child(2) { top: 15px; right: 15px; }
 @keyframes fanSpin { to { transform: rotate(360deg); } }
 .pc-glow {
-  position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%);
-  width: 200px; height: 40px;
-  background: radial-gradient(ellipse, rgba(255,255,255,0.1), transparent);
-  filter: blur(20px);
+  position: absolute; bottom: -50px; left: 50%; transform: translateX(-50%);
+  width: 280px; height: 60px;
+  background: radial-gradient(ellipse, rgba(255,255,255,0.12), transparent);
+  filter: blur(25px);
 }
 
 /* ========== SECTION COMMON ========== */
