@@ -1093,85 +1093,108 @@
   if (!canvas) return;
 
   const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping; // Насыщенность цветов
-  renderer.toneMappingExposure = 1.5;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.8;
 
-  // Усиленный свет для насыщенности
-  const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
+  // Яркий свет для насыщенности
+  const ambientLight = new THREE.AmbientLight(0xffffff, 2.5);
   scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 3.0);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 4.0);
   directionalLight.position.set(5, 3, 5);
   scene.add(directionalLight);
-  // Дополнительные источники для насыщенности
-  const pointLight1 = new THREE.PointLight(0xffd700, 1.5, 20); // Золотой свет
-  pointLight1.position.set(-5, 2, 3);
+  
+  // Золотое свечение
+  const pointLight1 = new THREE.PointLight(0xffd700, 3.0, 30);
+  pointLight1.position.set(-5, 2, 5);
   scene.add(pointLight1);
-  const pointLight2 = new THREE.PointLight(0xffa500, 1.0, 20); // Оранжевый свет
-  pointLight2.position.set(3, -2, 3);
+  
+  // Оранжевое свечение
+  const pointLight2 = new THREE.PointLight(0xff8c00, 2.5, 30);
+  pointLight2.position.set(5, -2, 5);
   scene.add(pointLight2);
+  
+  // Розоватое свечение для глубины
+  const pointLight3 = new THREE.PointLight(0xff6347, 1.5, 30);
+  pointLight3.position.set(0, 5, 3);
+  scene.add(pointLight3);
 
-  // Сфера (Сатурн) - насыщенные цвета
-  const sphereGeometry = new THREE.SphereGeometry(2, 64, 64);
+  // БОЛЬШАЯ Сфера (Сатурн) - насыщенные золотые цвета
+  const sphereGeometry = new THREE.SphereGeometry(2.5, 64, 64);
   const sphereMaterial = new THREE.MeshStandardMaterial({
-    color: 0xe8b84d, // Более насыщенный золотой
-    roughness: 0.4, // Меньше шероховатости
-    metalness: 0.3, // Немного металла
-    emissive: 0x332200, // Лёгкое свечение
-    emissiveIntensity: 0.2
+    color: 0xffb347, // Яркий оранжево-золотой
+    roughness: 0.2, // Гладкая
+    metalness: 0.4, // Металлический блеск
+    emissive: 0xff6600, // Оранжевое свечение
+    emissiveIntensity: 0.4 // Сильное свечение
   });
   const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
   scene.add(sphere);
 
-  // Кольца (тор) - насыщенные и яркие
-  const ringGeometry = new THREE.TorusGeometry(3.2, 0.4, 16, 100);
+  // Яркие кольца - золотистые
+  const ringGeometry = new THREE.TorusGeometry(4.0, 0.5, 16, 100);
   const ringMaterial = new THREE.MeshStandardMaterial({
-    color: 0xf0d080, // Насыщенный золотисто-бежевый
+    color: 0xffd700, // Золотой
     transparent: true,
-    opacity: 0.85, // Прозрачнее
+    opacity: 0.9,
     side: THREE.DoubleSide,
-    roughness: 0.5,
-    metalness: 0.2,
-    emissive: 0x443300,
-    emissiveIntensity: 0.15
+    roughness: 0.3,
+    metalness: 0.5,
+    emissive: 0xffaa00,
+    emissiveIntensity: 0.3
   });
   const rings = new THREE.Mesh(ringGeometry, ringMaterial);
   rings.rotation.x = Math.PI / 3;
   scene.add(rings);
 
-  // Вторая оболочка колец - яркие
-  const ringGeometry2 = new THREE.TorusGeometry(3.8, 0.15, 16, 100);
+  // Широкие яркие кольца
+  const ringGeometry2 = new THREE.TorusGeometry(4.8, 0.3, 16, 100);
   const ringMaterial2 = new THREE.MeshStandardMaterial({
-    color: 0xffe0a0, // Яркий золотистый
+    color: 0xffe4b5, // Светло-золотой
     transparent: true,
     opacity: 0.7,
     side: THREE.DoubleSide,
-    roughness: 0.6,
-    metalness: 0.1,
-    emissive: 0x554400,
-    emissiveIntensity: 0.1
+    roughness: 0.4,
+    metalness: 0.3,
+    emissive: 0xffcc44,
+    emissiveIntensity: 0.2
   });
   const rings2 = new THREE.Mesh(ringGeometry2, ringMaterial2);
   rings2.rotation.x = Math.PI / 3;
   scene.add(rings2);
 
-  // Третья тонкая яркая кольцевая линия
-  const ringGeometry3 = new THREE.TorusGeometry(2.8, 0.05, 8, 100);
+  // Тонкая яркая внутренняя кольцевая линия
+  const ringGeometry3 = new THREE.TorusGeometry(3.2, 0.08, 8, 100);
   const ringMaterial3 = new THREE.MeshStandardMaterial({
-    color: 0xffc040,
+    color: 0xfffa65, // Яркий жёлтый
     transparent: true,
-    opacity: 0.9,
-    emissive: 0xffa000,
-    emissiveIntensity: 0.3
+    opacity: 1.0,
+    emissive: 0xffff00,
+    emissiveIntensity: 0.5
   });
   const rings3 = new THREE.Mesh(ringGeometry3, ringMaterial3);
   rings3.rotation.x = Math.PI / 3;
   scene.add(rings3);
 
-  camera.position.z = 10;
+  // Внешняя тонкая кольцевая линия
+  const ringGeometry4 = new THREE.TorusGeometry(5.3, 0.05, 8, 100);
+  const ringMaterial4 = new THREE.MeshStandardMaterial({
+    color: 0xffcc88,
+    transparent: true,
+    opacity: 0.8,
+    emissive: 0xff8800,
+    emissiveIntensity: 0.3
+  });
+  const rings4 = new THREE.Mesh(ringGeometry4, ringMaterial4);
+  rings4.rotation.x = Math.PI / 3;
+  scene.add(rings4);
+
+  // Камера ближе к планете
+  camera.position.z = 12;
+  camera.position.x = 2; // Сдвиг влево, чтобы планета была справа
 
   // Мышь
   let mouseX = 0, mouseY = 0;
@@ -1183,13 +1206,17 @@
   // Анимация
   function animate() {
     requestAnimationFrame(animate);
-    rings.rotation.z += 0.003;
-    rings2.rotation.z -= 0.002;
-    rings3.rotation.z += 0.001;
-    sphere.rotation.y += 0.002;
-    camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
-    camera.position.y += (mouseY * 0.5 - camera.position.y) * 0.05;
+    rings.rotation.z += 0.004;
+    rings2.rotation.z -= 0.003;
+    rings3.rotation.z += 0.002;
+    rings4.rotation.z -= 0.001;
+    sphere.rotation.y += 0.003;
+    
+    // Плавное следование за мышью
+    camera.position.x += (2 + mouseX * 1 - camera.position.x) * 0.05;
+    camera.position.y += (mouseY * 1 - camera.position.y) * 0.05;
     camera.lookAt(scene.position);
+    
     renderer.render(scene, camera);
   }
   animate();
