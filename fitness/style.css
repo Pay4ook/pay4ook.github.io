@@ -202,6 +202,33 @@ section h2 {
 }
 .section-sub { color: var(--text-muted); font-size: 16px; margin-bottom: 48px; max-width: 500px; }
 
+/* ========== SPACE BACKGROUND ========== */
+.space-bg {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+}
+.star {
+  position: absolute; border-radius: 50%; background: #fff;
+  animation: twinkle var(--d, 3s) ease-in-out infinite;
+}
+@keyframes twinkle {
+  0%, 100% { opacity: var(--o, 0.3); }
+  50% { opacity: var(--o, 1); }
+}
+.meteor {
+  position: absolute; width: 2px; height: 80px;
+  background: linear-gradient(to bottom, rgba(198,255,0,0.8), transparent);
+  transform: rotate(45deg);
+  opacity: 0;
+  animation: meteorShoot var(--d, 4s) linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes meteorShoot {
+  0% { opacity: 0; transform: rotate(45deg) translateX(0); }
+  5% { opacity: 1; }
+  30% { opacity: 0; transform: rotate(45deg) translateX(-300px); }
+  100% { opacity: 0; }
+}
+
 /* ========== PROGRAMS ========== */
 .programs { padding: 100px 0; border-bottom: 1px solid var(--border); }
 .programs-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; }
@@ -276,7 +303,9 @@ section h2 {
   display: flex; flex-direction: column;
   transition: all 0.3s; position: relative;
 }
-.price-card:hover { border-color: rgba(198,255,0,0.3); transform: translateY(-4px); }
+.price-card:hover { transform: translateY(-4px); }
+.price-card:hover .btn-outline { border-color: var(--lime); color: var(--lime); }
+.price-card.selected { border-color: var(--lime); box-shadow: 0 0 30px rgba(198,255,0,0.2); }
 .price-card.featured { border-color: var(--lime); }
 .price-badge {
   position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
@@ -368,4 +397,18 @@ section h2 {
 
 @media (max-width: 900px) {
   .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+
+/* ========== 3D DUMBBELL ========== */
+.dumbbell-3d-section {
+  position: relative; height: 60vh; display: flex; align-items: center;
+  justify-content: center; overflow: hidden;
+  background: radial-gradient(ellipse at center, rgba(198,255,0,0.03) 0%, transparent 70%);
+  border-bottom: 1px solid var(--border);
+}
+.dumbbell-canvas-wrapper {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+}
+.dumbbell-canvas-wrapper canvas {
+  width: 100% !important; height: 100% !important;
 }
