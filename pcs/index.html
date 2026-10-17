@@ -1097,50 +1097,79 @@
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping; // Насыщенность цветов
+  renderer.toneMappingExposure = 1.5;
 
-  // Свет
-  const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+  // Усиленный свет для насыщенности
+  const ambientLight = new THREE.AmbientLight(0xffffff, 2.0);
   scene.add(ambientLight);
-  const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 3.0);
   directionalLight.position.set(5, 3, 5);
   scene.add(directionalLight);
+  // Дополнительные источники для насыщенности
+  const pointLight1 = new THREE.PointLight(0xffd700, 1.5, 20); // Золотой свет
+  pointLight1.position.set(-5, 2, 3);
+  scene.add(pointLight1);
+  const pointLight2 = new THREE.PointLight(0xffa500, 1.0, 20); // Оранжевый свет
+  pointLight2.position.set(3, -2, 3);
+  scene.add(pointLight2);
 
-  // Сфера (Сатурн)
+  // Сфера (Сатурн) - насыщенные цвета
   const sphereGeometry = new THREE.SphereGeometry(2, 64, 64);
   const sphereMaterial = new THREE.MeshStandardMaterial({
-    color: 0xc9a96e,
-    roughness: 0.6,
-    metalness: 0.2
+    color: 0xe8b84d, // Более насыщенный золотой
+    roughness: 0.4, // Меньше шероховатости
+    metalness: 0.3, // Немного металла
+    emissive: 0x332200, // Лёгкое свечение
+    emissiveIntensity: 0.2
   });
   const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
   scene.add(sphere);
 
-  // Кольца (тор)
+  // Кольца (тор) - насыщенные и яркие
   const ringGeometry = new THREE.TorusGeometry(3.2, 0.4, 16, 100);
   const ringMaterial = new THREE.MeshStandardMaterial({
-    color: 0xe8d5b7,
+    color: 0xf0d080, // Насыщенный золотисто-бежевый
     transparent: true,
-    opacity: 0.7,
+    opacity: 0.85, // Прозрачнее
     side: THREE.DoubleSide,
-    roughness: 0.8,
-    metalness: 0.1
+    roughness: 0.5,
+    metalness: 0.2,
+    emissive: 0x443300,
+    emissiveIntensity: 0.15
   });
   const rings = new THREE.Mesh(ringGeometry, ringMaterial);
   rings.rotation.x = Math.PI / 3;
   scene.add(rings);
 
-  // Вторая оболочка колец
+  // Вторая оболочка колец - яркие
   const ringGeometry2 = new THREE.TorusGeometry(3.8, 0.15, 16, 100);
   const ringMaterial2 = new THREE.MeshStandardMaterial({
-    color: 0xd4b896,
+    color: 0xffe0a0, // Яркий золотистый
     transparent: true,
-    opacity: 0.5,
+    opacity: 0.7,
     side: THREE.DoubleSide,
-    roughness: 0.9
+    roughness: 0.6,
+    metalness: 0.1,
+    emissive: 0x554400,
+    emissiveIntensity: 0.1
   });
   const rings2 = new THREE.Mesh(ringGeometry2, ringMaterial2);
   rings2.rotation.x = Math.PI / 3;
   scene.add(rings2);
+
+  // Третья тонкая яркая кольцевая линия
+  const ringGeometry3 = new THREE.TorusGeometry(2.8, 0.05, 8, 100);
+  const ringMaterial3 = new THREE.MeshStandardMaterial({
+    color: 0xffc040,
+    transparent: true,
+    opacity: 0.9,
+    emissive: 0xffa000,
+    emissiveIntensity: 0.3
+  });
+  const rings3 = new THREE.Mesh(ringGeometry3, ringMaterial3);
+  rings3.rotation.x = Math.PI / 3;
+  scene.add(rings3);
 
   camera.position.z = 10;
 
@@ -1156,6 +1185,7 @@
     requestAnimationFrame(animate);
     rings.rotation.z += 0.003;
     rings2.rotation.z -= 0.002;
+    rings3.rotation.z += 0.001;
     sphere.rotation.y += 0.002;
     camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
     camera.position.y += (mouseY * 0.5 - camera.position.y) * 0.05;

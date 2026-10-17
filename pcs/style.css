@@ -172,23 +172,28 @@ img { max-width: 100%; display: block; }
    ======================== */
 .saturn-section {
   position: relative;
-  height: 100vh;
+  height: 80vh;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end; /* Сбоку справа */
   overflow: hidden;
-  background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%);
+  background: radial-gradient(ellipse at 80% 50%, rgba(180, 140, 80, 0.08) 0%, transparent 60%),
+              radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%);
 }
 .saturn-canvas-wrapper {
   position: absolute;
   inset: 0;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end; /* Сбоку справа */
+  padding-right: 10%; /* Отступ от края */
 }
 .saturn-canvas-wrapper canvas {
-  width: 100% !important;
-  height: 100% !important;
+  width: 60% !important; /* Уменьшен в 1.5 раза */
+  height: 60% !important;
+  max-width: 500px; /* Максимальный размер */
+  max-height: 500px;
+  filter: saturate(1.8) brightness(1.2); /* Насыщенность и яркость */
 }
 
 /* ========================
