@@ -220,6 +220,93 @@ img { max-width: 100%; display: block; }
   30% { opacity: 0; transform: rotate(45deg) translateX(-300px); }
   100% { opacity: 0; }
 }
+
+/* Космическая пыль */
+.cosmic-dust {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+.dust-particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: dustFloat 15s ease-in-out infinite;
+}
+@keyframes dustFloat {
+  0%, 100% { transform: translate(0, 0); opacity: 0; }
+  25% { opacity: 0.5; }
+  50% { transform: translate(100px, -100px); opacity: 0.3; }
+  75% { opacity: 0.5; }
+}
+
+/* Комета */
+.comet {
+  position: absolute;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 1));
+  animation: cometShoot 6s linear infinite;
+  opacity: 0;
+}
+@keyframes cometShoot {
+  0% { transform: translateX(0) translateY(0) rotate(-30deg); opacity: 0; }
+  2% { opacity: 1; }
+  15% { transform: translateX(-500px) translateY(300px) rotate(-30deg); opacity: 0; }
+  100% { opacity: 0; }
+}
+
+/* Астероид */
+.asteroid {
+  position: absolute;
+  width: 15px;
+  height: 12px;
+  background: radial-gradient(circle at 30% 30%, #888, #333);
+  border-radius: 40% 60% 50% 40%;
+  animation: asteroidFloat 20s ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
+}
+@keyframes asteroidFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(50px, -50px) rotate(90deg); }
+  50% { transform: translate(100px, 0) rotate(180deg); }
+  75% { transform: translate(50px, 50px) rotate(270deg); }
+}
+
+/* Звёздная вспышка (звезда с лучами) */
+.star-burst {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 
+    0 0 10px 2px rgba(255, 255, 255, 0.8),
+    0 0 20px 4px rgba(200, 200, 255, 0.4);
+  animation: starBurstPulse 3s ease-in-out infinite;
+}
+@keyframes starBurstPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.5); opacity: 1; }
+}
+
+/* Галактика (спиральная) */
+.galaxy {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  background: radial-gradient(ellipse, rgba(150, 120, 200, 0.2) 0%, rgba(100, 80, 150, 0.1) 40%, transparent 70%);
+  border-radius: 50%;
+  animation: galaxySpin 60s linear infinite;
+  filter: blur(2px);
+}
+@keyframes galaxySpin {
+  to { transform: rotate(360deg); }
+}
 .hero-inner {
   display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
   align-items: center; position: relative; z-index: 1;
