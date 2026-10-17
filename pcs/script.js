@@ -51,3 +51,24 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     }
   });
 });
+
+// Rig card selection on "Заказать" click
+document.querySelectorAll('.order-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    const card = this.closest('.rig-card');
+    
+    // Remove selected from all cards
+    document.querySelectorAll('.rig-card').forEach(c => c.classList.remove('selected'));
+    
+    // Add selected to clicked card
+    card.classList.add('selected');
+    
+    // Scroll to contacts
+    setTimeout(() => {
+      const contacts = document.getElementById('contacts');
+      if (contacts) {
+        contacts.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 300);
+  });
+});
