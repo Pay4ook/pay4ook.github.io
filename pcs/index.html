@@ -12,8 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
@@ -144,37 +143,10 @@
   </div>
 </section>
 
-<!-- ========== SATURN PROMO ========== -->
-<section class="saturn-promo" id="saturn">
-  <div class="saturn-container">
-    <div class="saturn-hint">Продолжай скроллить...</div>
-    <div class="saturn-planet-wrapper">
-      <!-- Внешнее кольцо Сатурна -->
-      <div class="saturn-ring-back"></div>
-      <!-- Планета -->
-      <div class="saturn-body">
-        <div class="saturn-stripe"></div>
-        <div class="saturn-stripe"></div>
-        <div class="saturn-stripe"></div>
-        <div class="saturn-core"></div>
-      </div>
-      <!-- Внешнее кольцо Сатурна -->
-      <div class="saturn-ring-front"></div>
-      <!-- Вспышка при открытии -->
-      <div class="saturn-burst"></div>
-      <!-- Текст внутри планеты -->
-      <div class="saturn-content">
-        <div class="saturn-content-inner">
-          <div class="saturn-icon">🚀</div>
-          <h2>ОПТИМИЗАЦИЯ</h2>
-          <p class="saturn-sub">В ПОДАРОК</p>
-          <div class="saturn-divider"></div>
-          <p class="saturn-desc">Бесплатная оптимизация вашего ПК перед сборкой</p>
-          <a href="#rigs" class="btn btn-gold">Выбрать сборку</a>
-        </div>
-      </div>
-    </div>
-    <div class="saturn-hint-bottom">Вернуться ↑</div>
+<!-- ========== 3D SATURN ========== -->
+<section class="saturn-section" id="saturn">
+  <div class="saturn-canvas-wrapper">
+    <canvas id="saturn-canvas"></canvas>
   </div>
 </section>
 
@@ -1041,217 +1013,91 @@
 <script src="script.js"></script>
 <script>
 // ========================
-// GSAP ANIMATIONS
+// THREE.JS SATURN 3D
 // ========================
-gsap.registerPlugin(ScrollTrigger);
+(function() {
+  const canvas = document.getElementById('saturn-canvas');
+  if (!canvas) return;
 
-document.addEventListener('DOMContentLoaded', () => {
-  
-  // ===== SATURN ANIMATION =====
-  const saturnSection = document.querySelector('#saturn');
-  const saturnContainer = document.querySelector('.saturn-container');
-  const saturnPlanet = document.querySelector('.saturn-planet-wrapper');
-  const saturnBurst = document.querySelector('.saturn-burst');
-  const saturnContent = document.querySelector('.saturn-content');
-  const saturnContentInner = document.querySelector('.saturn-content-inner');
-  
-  if (saturnSection && saturnContainer) {
-    const ctrl = gsap.timeline({
-      scrollTrigger: {
-        trigger: saturnSection,
-        start: 'top top',
-        end: '+=200%',
-        scrub: 1,
-        pin: true,
-        onEnter: () => saturnContainer.classList.add('revealed'),
-        onLeave: () => saturnContainer.classList.remove('revealed'),
-        onEnterBack: () => saturnContainer.classList.add('revealed'),
-        onLeaveBack: () => saturnContainer.classList.remove('revealed'),
-      }
-    });
-    
-    // Фаза 1: Планета приближается (0-40%)
-    ctrl.to(saturnPlanet, {
-      scale: 1.3,
-      duration: 0.4,
-      ease: 'power2.out'
-    }, 0);
-    
-    // Фаза 2: Вспышка и открытие (40-60%)
-    ctrl.to(saturnBurst, {
-      width: 600,
-      height: 600,
-      opacity: 1,
-      duration: 0.1,
-      ease: 'power2.inOut'
-    }, 0.4);
-    
-    ctrl.to(saturnBurst, {
-      opacity: 0,
-      duration: 0.1,
-      ease: 'power2.in'
-    }, 0.5);
-    
-    ctrl.to(saturnContent, {
-      width: 600,
-      height: 600,
-      opacity: 1,
-      duration: 0.15,
-      ease: 'power2.out'
-    }, 0.45);
-    
-    ctrl.to(saturnContentInner, {
-      opacity: 1,
-      scale: 1,
-      duration: 0.15,
-      ease: 'back.out(1.7)'
-    }, 0.5);
-    
-    // Фаза 3: Планета закрывается (60-85%)
-    ctrl.to(saturnContentInner, {
-      opacity: 0,
-      scale: 0.5,
-      duration: 0.25,
-      ease: 'power2.in'
-    }, 0.6);
-    
-    ctrl.to(saturnContent, {
-      opacity: 0,
-      width: 0,
-      height: 0,
-      duration: 0.25,
-      ease: 'power2.in'
-    }, 0.6);
-    
-    // Фаза 4: Возврат к исходному размеру (85-100%)
-    ctrl.to(saturnPlanet, {
-      scale: 1,
-      duration: 0.15,
-      ease: 'power2.out'
-    }, 0.85);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+  // Свет
+  const ambientLight = new THREE.AmbientLight(0x404040, 1.5);
+  scene.add(ambientLight);
+  const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+  directionalLight.position.set(5, 3, 5);
+  scene.add(directionalLight);
+
+  // Сфера (Сатурн)
+  const sphereGeometry = new THREE.SphereGeometry(2, 64, 64);
+  const sphereMaterial = new THREE.MeshStandardMaterial({
+    color: 0xc9a96e,
+    roughness: 0.6,
+    metalness: 0.2
+  });
+  const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  scene.add(sphere);
+
+  // Кольца (тор)
+  const ringGeometry = new THREE.TorusGeometry(3.2, 0.4, 16, 100);
+  const ringMaterial = new THREE.MeshStandardMaterial({
+    color: 0xe8d5b7,
+    transparent: true,
+    opacity: 0.7,
+    side: THREE.DoubleSide,
+    roughness: 0.8,
+    metalness: 0.1
+  });
+  const rings = new THREE.Mesh(ringGeometry, ringMaterial);
+  rings.rotation.x = Math.PI / 3;
+  scene.add(rings);
+
+  // Вторая оболочка колец
+  const ringGeometry2 = new THREE.TorusGeometry(3.8, 0.15, 16, 100);
+  const ringMaterial2 = new THREE.MeshStandardMaterial({
+    color: 0xd4b896,
+    transparent: true,
+    opacity: 0.5,
+    side: THREE.DoubleSide,
+    roughness: 0.9
+  });
+  const rings2 = new THREE.Mesh(ringGeometry2, ringMaterial2);
+  rings2.rotation.x = Math.PI / 3;
+  scene.add(rings2);
+
+  camera.position.z = 10;
+
+  // Мышь
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+  });
+
+  // Анимация
+  function animate() {
+    requestAnimationFrame(animate);
+    rings.rotation.z += 0.003;
+    rings2.rotation.z -= 0.002;
+    sphere.rotation.y += 0.002;
+    camera.position.x += (mouseX * 0.5 - camera.position.x) * 0.05;
+    camera.position.y += (mouseY * 0.5 - camera.position.y) * 0.05;
+    camera.lookAt(scene.position);
+    renderer.render(scene, camera);
   }
-  
-  // ===== HERO ANIMATIONS =====
-  gsap.from('.hero-badge', {
-    opacity: 0,
-    y: 30,
-    duration: 0.8,
-    ease: 'power3.out'
+  animate();
+
+  // Ресайз
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
   });
-  
-  gsap.from('h1', {
-    opacity: 0,
-    y: 50,
-    duration: 1,
-    delay: 0.2,
-    ease: 'power3.out'
-  });
-  
-  gsap.from('.hero-sub', {
-    opacity: 0,
-    y: 30,
-    duration: 0.8,
-    delay: 0.4,
-    ease: 'power3.out'
-  });
-  
-  gsap.from('.hero-actions', {
-    opacity: 0,
-    y: 30,
-    duration: 0.8,
-    delay: 0.6,
-    ease: 'power3.out'
-  });
-  
-  gsap.from('.hero-stats', {
-    opacity: 0,
-    y: 30,
-    duration: 0.8,
-    delay: 0.8,
-    ease: 'power3.out'
-  });
-  
-  gsap.from('.hero-3d', {
-    opacity: 0,
-    x: 100,
-    duration: 1.2,
-    delay: 0.3,
-    ease: 'power3.out'
-  });
-  
-  // ===== RIGS ANIMATIONS =====
-  gsap.utils.toArray('.rig-card').forEach((card, i) => {
-    gsap.from(card, {
-      scrollTrigger: {
-        trigger: card,
-        start: 'top 85%',
-        toggleActions: 'play none none none'
-      },
-      opacity: 0,
-      y: 60,
-      duration: 0.8,
-      delay: i * 0.15,
-      ease: 'power3.out'
-    });
-  });
-  
-  // ===== CONFIGURATOR ANIMATIONS =====
-  gsap.utils.toArray('.config-category').forEach((cat, i) => {
-    gsap.from(cat, {
-      scrollTrigger: {
-        trigger: cat,
-        start: 'top 85%',
-        toggleActions: 'play none none none'
-      },
-      opacity: 0,
-      x: -40,
-      duration: 0.8,
-      ease: 'power3.out'
-    });
-  });
-  
-  // ===== COMPONENTS ANIMATIONS =====
-  gsap.utils.toArray('.comp-card').forEach((card, i) => {
-    gsap.from(card, {
-      scrollTrigger: {
-        trigger: card,
-        start: 'top 85%',
-        toggleActions: 'play none none none'
-      },
-      opacity: 0,
-      scale: 0.8,
-      duration: 0.6,
-      delay: i * 0.1,
-      ease: 'back.out(1.7)'
-    });
-  });
-  
-  // ===== MOBILE 3D ANIMATIONS =====
-  gsap.from('.cube-3d', {
-    scrollTrigger: {
-      trigger: '.mobile-3d',
-      start: 'top 80%',
-    },
-    opacity: 0,
-    rotationY: 180,
-    rotationX: 90,
-    duration: 1.5,
-    ease: 'power3.out'
-  });
-  
-  gsap.from('.cpu-3d', {
-    scrollTrigger: {
-      trigger: '.mobile-3d',
-      start: 'top 80%',
-    },
-    opacity: 0,
-    rotationY: -180,
-    duration: 1.5,
-    delay: 0.3,
-    ease: 'power3.out'
-  });
-  
-});
+})();
 </script>
 </body>
 </html>

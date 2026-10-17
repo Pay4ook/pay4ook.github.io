@@ -168,247 +168,32 @@ img { max-width: 100%; display: block; }
 }
 
 /* ========================
-   SATURN PROMO SECTION
+   SATURN 3D SECTION
    ======================== */
-.saturn-promo {
+.saturn-section {
   position: relative;
-  height: 300vh; /* Длинная секция для скролла */
-  overflow: visible;
-}
-.saturn-container {
-  position: sticky;
-  top: 0;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%);
 }
-.saturn-hint {
+.saturn-canvas-wrapper {
   position: absolute;
-  bottom: 5vh;
-  left: 50%;
-  transform: translateX(-50%);
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 14px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  animation: bounceHint 2s ease-in-out infinite;
-  z-index: 10;
-}
-@keyframes bounceHint {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(-10px); }
-}
-.saturn-hint-bottom {
-  position: absolute;
-  top: 5vh;
-  left: 50%;
-  transform: translateX(-50%);
-  color: rgba(255, 255, 255, 0.4);
-  font-size: 12px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  opacity: 0;
-  transition: opacity 0.5s;
-  z-index: 10;
-}
-.saturn-container.revealed .saturn-hint-bottom {
-  opacity: 1;
-}
-.saturn-container.revealed .saturn-hint {
-  opacity: 0;
-}
-
-/* Обёртка планеты */
-.saturn-planet-wrapper {
-  position: relative;
-  width: 300px;
-  height: 300px;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-/* Кольцо сзади */
-.saturn-ring-back {
-  position: absolute;
-  width: 420px;
-  height: 120px;
-  border: 20px solid rgba(180, 160, 140, 0.3);
-  border-radius: 50%;
-  transform: rotateX(75deg);
-  filter: blur(2px);
-  z-index: 1;
-  box-shadow: 0 0 30px rgba(180, 160, 140, 0.2);
+.saturn-canvas-wrapper canvas {
+  width: 100% !important;
+  height: 100% !important;
 }
 
-/* Тело Сатурна */
-.saturn-body {
-  position: relative;
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  overflow: hidden;
-  z-index: 2;
-  box-shadow: 
-    inset -30px -30px 60px rgba(0, 0, 0, 0.5),
-    0 0 80px rgba(180, 160, 140, 0.3);
-}
-.saturn-core {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background: linear-gradient(
-    180deg,
-    #c9a96e 0%,
-    #b8945a 20%,
-    #a67c47 40%,
-    #9b6d3d 60%,
-    #b8945a 80%,
-    #c9a96e 100%
-  );
-  animation: saturnRotate 60s linear infinite;
-}
-@keyframes saturnRotate {
-  0% { background-position: 0% 0%; }
-  100% { background-position: 0% 200%; }
-}
-.saturn-stripe {
-  position: absolute;
-  width: 100%;
-  height: 30px;
-  background: linear-gradient(90deg, 
-    rgba(139, 119, 80, 0.4), 
-    rgba(160, 130, 90, 0.2), 
-    rgba(139, 119, 80, 0.4)
-  );
-  z-index: 3;
-}
-.saturn-stripe:nth-child(1) { top: 30%; }
-.saturn-stripe:nth-child(2) { top: 50%; }
-.saturn-stripe:nth-child(3) { top: 70%; }
-
-/* Кольцо спереди */
-.saturn-ring-front {
-  position: absolute;
-  width: 420px;
-  height: 120px;
-  border: 20px solid rgba(200, 180, 150, 0.5);
-  border-top: none;
-  border-radius: 0 0 50% 50%;
-  transform: rotateX(75deg);
-  filter: blur(1px);
-  z-index: 4;
-  box-shadow: 0 0 20px rgba(200, 180, 150, 0.3);
-}
-
-/* Вспышка */
-.saturn-burst {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle, 
-    rgba(255, 215, 120, 0.8), 
-    rgba(255, 180, 80, 0.4), 
-    transparent
-  );
-  z-index: 10;
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* Контент внутри планеты */
-.saturn-content {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-radius: 50%;
-  overflow: hidden;
-  z-index: 5;
-  opacity: 0;
-  pointer-events: none;
-}
-.saturn-content-inner {
-  width: 500px;
-  height: 500px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px;
-  background: radial-gradient(circle, 
-    rgba(30, 25, 20, 0.98) 0%, 
-    rgba(15, 12, 10, 0.99) 100%
-  );
-  border-radius: 50%;
-  opacity: 0;
-  transform: scale(0.5);
-  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.saturn-content-inner.visible {
-  opacity: 1;
-  transform: scale(1);
-  pointer-events: auto;
-}
-.saturn-icon {
-  font-size: 48px;
-  margin-bottom: 16px;
-  animation: floatIcon 3s ease-in-out infinite;
-}
-@keyframes floatIcon {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-.saturn-content h2 {
-  font-size: 42px;
-  font-weight: 900;
-  background: linear-gradient(135deg, #ffd700, #ffb300, #ffd700);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0 0 8px 0;
-  letter-spacing: 4px;
-  text-shadow: 0 0 40px rgba(255, 215, 0, 0.5);
-}
-.saturn-sub {
-  font-size: 28px;
-  font-weight: 700;
-  color: #ffd700;
-  margin: 0 0 20px 0;
-  letter-spacing: 6px;
-}
-.saturn-divider {
-  width: 80px;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, #ffd700, transparent);
-  margin: 0 auto 20px;
-}
-.saturn-desc {
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.7);
-  margin: 0 0 30px 0;
-  max-width: 280px;
-}
-.btn-gold {
-  background: linear-gradient(135deg, #ffd700, #ffb300);
-  color: #000;
-  padding: 14px 36px;
-  border-radius: 10px;
-  font-size: 15px;
-  font-weight: 700;
-  border: none;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-}
-.btn-gold:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
-}
+/* ========================
+   SATURN PROMO SECTION (OLD - REMOVED)
+   ======================== */
 
 /* Дополнительные звёзды для космоса */
 .star-field .star:nth-child(odd) {
