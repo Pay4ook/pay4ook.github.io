@@ -28,7 +28,7 @@ img { max-width: 100%; display: block; }
 /* ========== HEADER ========== */
 .header {
   position: sticky; top: 0; z-index: 100;
-  background: rgba(10,10,10,0.85);
+  background: rgba(10,10,10,0.95);
   backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
@@ -77,6 +77,86 @@ img { max-width: 100%; display: block; }
   .nav { display: none; }
   .burger { display: flex; }
   .mobile-menu.open { display: flex; }
+}
+
+/* Общие звёзды и космос для всех секций */
+.global-stars {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.global-star {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  animation: globalTwinkle var(--duration, 3s) ease-in-out infinite;
+}
+@keyframes globalTwinkle {
+  0%, 100% { opacity: var(--min-opacity, 0.2); }
+  50% { opacity: var(--max-opacity, 0.9); }
+}
+.global-meteor {
+  position: absolute;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), transparent);
+  transform: rotate(45deg);
+  opacity: 0;
+  animation: globalMeteorShoot var(--duration, 4s) linear infinite;
+}
+@keyframes globalMeteorShoot {
+  0% { opacity: 0; transform: rotate(45deg) translateX(0); }
+  5% { opacity: 1; }
+  30% { opacity: 0; transform: rotate(45deg) translateX(-300px); }
+  100% { opacity: 0; }
+}
+.global-star-burst {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px 2px rgba(255, 255, 255, 0.8),
+              0 0 20px 4px rgba(200, 200, 255, 0.4);
+  animation: globalStarBurstPulse var(--duration, 3s) ease-in-out infinite;
+}
+@keyframes globalStarBurstPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.5); opacity: 1; }
+}
+.global-asteroid {
+  position: absolute;
+  width: 15px;
+  height: 12px;
+  background: radial-gradient(circle at 30% 30%, #888, #333);
+  border-radius: 40% 60% 50% 40%;
+  animation: globalAsteroidFloat var(--duration, 20s) ease-in-out infinite;
+  box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
+}
+@keyframes globalAsteroidFloat {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(50px, -50px) rotate(90deg); }
+  50% { transform: translate(100px, 0) rotate(180deg); }
+  75% { transform: translate(50px, 50px) rotate(270deg); }
+}
+.global-comet {
+  position: absolute;
+  width: 100px;
+  height: 2px;
+  background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 1));
+  animation: globalCometShoot var(--duration, 6s) linear infinite;
+  opacity: 0;
+}
+@keyframes globalCometShoot {
+  0% { transform: translateX(0) translateY(0) rotate(-30deg); opacity: 0; }
+  2% { opacity: 1; }
+  15% { transform: translateX(-500px) translateY(300px) rotate(-30deg); opacity: 0; }
+  100% { opacity: 0; }
 }
 
 /* ========== HERO ========== */
