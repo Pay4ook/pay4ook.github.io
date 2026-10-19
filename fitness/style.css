@@ -203,21 +203,45 @@ section h2 {
 .section-sub { color: var(--text-muted); font-size: 16px; margin-bottom: 48px; max-width: 500px; }
 
 /* ========== SPACE BACKGROUND ========== */
-.space-bg {
-  position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+/* Make EVERY section a containing block for stars */
+.hero,
+.programs,
+.trainers,
+.pricing,
+.about,
+.booking,
+.dumbbell-3d-section {
+  position: relative;
+  overflow: hidden;
 }
+.space-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ===== STARS ===== */
 .star {
-  position: absolute; border-radius: 50%; background: #fff;
-  animation: twinkle var(--d, 3s) ease-in-out infinite;
+  position: absolute;
+  border-radius: 50%;
+  background: #C6FF00;
+  box-shadow: 0 0 4px rgba(198,255,0,0.6), 0 0 8px rgba(198,255,0,0.3);
+  animation: twinkle ease-in-out infinite;
+  animation-duration: var(--d, 3s);
   animation-delay: var(--d-delay, 0s);
-  box-shadow: 0 0 3px rgba(255,255,255,0.5);
 }
 @keyframes twinkle {
-  0%, 100% { opacity: 0.3; }
-  50% { opacity: 1; }
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.3); }
 }
+
+/* ===== METEORS ===== */
 .meteor {
-  position: absolute; width: 2px; height: 80px;
+  position: absolute;
+  width: 2px;
+  height: 80px;
   background: linear-gradient(to bottom, rgba(198,255,0,0.8), transparent);
   transform: rotate(45deg);
   opacity: 0;
@@ -231,36 +255,27 @@ section h2 {
   100% { opacity: 0; }
 }
 
-/* ========== SPACE BACKGROUND ========== */
-.space-bg {
-  position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
-}
-.star {
-  position: absolute; border-radius: 50%; background: #fff;
-  animation: twinkle var(--d, 3s) ease-in-out infinite;
-}
-@keyframes twinkle {
-  0%, 100% { opacity: var(--o, 0.5); }
-  50% { opacity: 1; }
-}
+/* ===== STAR BURSTS ===== */
 .star-burst {
   position: absolute;
   width: 4px; height: 4px;
   background: #C6FF00;
   border-radius: 50%;
-  box-shadow: 0 0 12px 3px rgba(198,255,0,0.8),
-              0 0 24px 6px rgba(198,255,0,0.4);
+  box-shadow: 0 0 12px 3px rgba(198,255,0,0.8), 0 0 24px 6px rgba(198,255,0,0.4);
   animation: starBurstPulse 3s ease-in-out infinite;
 }
 @keyframes starBurstPulse {
   0%, 100% { transform: scale(1); opacity: 0.7; }
   50% { transform: scale(1.6); opacity: 1; }
 }
+
+/* ===== COMETS ===== */
 .comet {
   position: absolute;
   width: 100px; height: 2px;
   background: linear-gradient(to right, transparent, #C6FF00, #C6FF00);
   animation: cometShoot 6s linear infinite;
+  animation-delay: var(--delay, 0s);
   opacity: 0;
 }
 @keyframes cometShoot {
@@ -269,12 +284,15 @@ section h2 {
   15% { transform: translateX(-500px) translateY(300px) rotate(-30deg); opacity: 0; }
   100% { opacity: 0; }
 }
+
+/* ===== ASTEROIDS ===== */
 .asteroid {
   position: absolute;
   width: 15px; height: 12px;
   background: radial-gradient(circle at 30% 30%, #888, #333);
   border-radius: 40% 60% 50% 40%;
   animation: asteroidFloat 20s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
   box-shadow: 0 0 10px rgba(100, 100, 100, 0.5);
 }
 @keyframes asteroidFloat {
@@ -283,6 +301,8 @@ section h2 {
   50% { transform: translate(100px, 0) rotate(180deg); }
   75% { transform: translate(50px, 50px) rotate(270deg); }
 }
+
+/* ===== COSMIC DUST ===== */
 .cosmic-dust {
   position: absolute; width: 100%; height: 100%; overflow: hidden;
 }
@@ -292,6 +312,7 @@ section h2 {
   background: rgba(198,255,0,0.3);
   border-radius: 50%;
   animation: dustFloat 15s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
 }
 @keyframes dustFloat {
   0%, 100% { transform: translate(0, 0); opacity: 0; }
