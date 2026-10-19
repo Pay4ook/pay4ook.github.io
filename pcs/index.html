@@ -1157,217 +1157,258 @@ function copyPromo(btn) {
 }
 
 // ========================
-// 2D CANVAS SATURN
+// THREE.JS VOLUMETRIC SATURN
 // ========================
 (function() {
   const wrap = document.getElementById('saturnScene');
   if (!wrap) return;
-  const c = document.createElement('canvas');
-  c.style.cssText = 'width:100%;height:100%;display:block;border-radius:12px;';
-  wrap.appendChild(c);
-  const ctx = c.getContext('2d');
+  
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
+  camera.position.set(0, 3, 12);
+  camera.lookAt(0, 0, 0);
 
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.5;
+  wrap.appendChild(renderer.domElement);
+
+  // Lighting setup for volumetric look
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+  scene.add(ambientLight);
+
+  const sunLight = new THREE.DirectionalLight(0xfff5e6, 2.5);
+  sunLight.position.set(5, 3, 5);
+  scene.add(sunLight);
+
+  const backLight = new THREE.DirectionalLight(0xffd4a0, 1.0);
+  backLight.position.set(-3, -2, -5);
+  scene.add(backLight);
+
+  const rimLight = new THREE.PointLight(0xffeedd, 1.5, 20);
+  rimLight.position.set(-4, 4, 4);
+  scene.add(rimLight);
+
+  // Saturn group
+  const saturnGroup = new THREE.Group();
+  scene.add(saturnGroup);
+
+  // Create planet texture procedurally
+  const planetCanvas = document.createElement('canvas');
+  planetCanvas.width = 512;
+  planetCanvas.height = 256;
+  const pCtx = planetCanvas.getContext('2d');
+
+  // Planet gradient base
+  const pGrad = pCtx.createLinearGradient(0, 0, 0, 256);
+  pGrad.addColorStop(0, '#4a2a15');
+  pGrad.addColorStop(0.2, '#8a5a30');
+  pGrad.addColorStop(0.4, '#c4953f');
+  pGrad.addColorStop(0.5, '#d4a855');
+  pGrad.addColorStop(0.6, '#c4953f');
+  pGrad.addColorStop(0.8, '#8a5a30');
+  pGrad.addColorStop(1, '#4a2a15');
+  pCtx.fillStyle = pGrad;
+  pCtx.fillRect(0, 0, 512, 256);
+
+  // Add bands
+  for (let i = 0; i < 15; i++) {
+    const y = (256 / 15) * i;
+    const bandH = 256 / 15;
+    const alpha = 0.1 + Math.random() * 0.15;
+    pCtx.fillStyle = `rgba(${120 + Math.random() * 80}, ${80 + Math.random() * 60}, ${40 + Math.random() * 30}, ${alpha})`;
+    pCtx.fillRect(0, y, 512, bandH);
+  }
+
+  // Add shimmer
+  for (let i = 0; i < 100; i++) {
+    pCtx.fillStyle = `rgba(255, 230, 180, ${Math.random() * 0.05})`;
+    pCtx.fillRect(Math.random() * 512, Math.random() * 256, 20, 2);
+  }
+
+  const planetTexture = new THREE.CanvasTexture(planetCanvas);
+
+  // Planet sphere
+  const planetGeo = new THREE.SphereGeometry(2.2, 64, 64);
+  const planetMat = new THREE.MeshStandardMaterial({
+    map: planetTexture,
+    roughness: 0.7,
+    metalness: 0.1,
+    emissive: new THREE.Color(0xffd4a0),
+    emissiveIntensity: 0.15
+  });
+  const planet = new THREE.Mesh(planetGeo, planetMat);
+  saturnGroup.add(planet);
+
+  // Atmosphere glow
+  const glowGeo = new THREE.SphereGeometry(2.4, 64, 64);
+  const glowMat = new THREE.ShaderMaterial({
+    vertexShader: `
+      varying vec3 vNormal;
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vNormal;
+      void main() {
+        float intensity = pow(0.65 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+        gl_FragColor = vec4(1.0, 0.85, 0.6, intensity * 0.6);
+      }
+    `,
+    blending: THREE.AdditiveBlending,
+    side: THREE.BackSide,
+    transparent: true
+  });
+  const glow = new THREE.Mesh(glowGeo, glowMat);
+  saturnGroup.add(glow);
+
+  // Saturn rings - multiple layers
+  const ringConfigs = [
+    { inner: 3.0, outer: 3.4, color: 0x8a7a5a, opacity: 0.5, roughness: 0.9 },
+    { inner: 3.4, outer: 3.8, color: 0xb89a6a, opacity: 0.7, roughness: 0.8 },
+    { inner: 3.8, outer: 4.5, color: 0xc8a868, opacity: 0.85, roughness: 0.7 },
+    { inner: 4.5, outer: 4.7, color: 0x888888, opacity: 0.3, roughness: 1.0 }, // Cassini division
+    { inner: 4.7, outer: 5.3, color: 0xd0b070, opacity: 0.7, roughness: 0.8 },
+    { inner: 5.3, outer: 5.7, color: 0xc0a060, opacity: 0.6, roughness: 0.85 },
+    { inner: 5.7, outer: 5.9, color: 0x999999, opacity: 0.2, roughness: 1.0 }, // Encke gap
+    { inner: 5.9, outer: 6.4, color: 0xc8a868, opacity: 0.5, roughness: 0.9 }
+  ];
+
+  ringConfigs.forEach(cfg => {
+    const ringCanvas = document.createElement('canvas');
+    ringCanvas.width = 512;
+    ringCanvas.height = 64;
+    const rCtx = ringCanvas.getContext('2d');
+
+    // Ring gradient
+    const rGrad = rCtx.createLinearGradient(0, 0, 512, 0);
+    const c = new THREE.Color(cfg.color);
+    rGrad.addColorStop(0, `rgba(0,0,0,0)`);
+    rGrad.addColorStop(0.1, `rgba(${Math.floor(c.r*255)},${Math.floor(c.g*255)},${Math.floor(c.b*255)},${cfg.opacity})`);
+    rGrad.addColorStop(0.5, `rgba(${Math.floor(c.r*255*1.1)},${Math.floor(c.g*255*1.1)},${Math.floor(c.b*255*1.1)},${cfg.opacity * 1.2})`);
+    rGrad.addColorStop(0.9, `rgba(${Math.floor(c.r*255)},${Math.floor(c.g*255)},${Math.floor(c.b*255)},${cfg.opacity})`);
+    rGrad.addColorStop(1, `rgba(0,0,0,0)`);
+    rCtx.fillStyle = rGrad;
+    rCtx.fillRect(0, 0, 512, 64);
+
+    // Add texture noise to ring
+    for (let i = 0; i < 500; i++) {
+      const x = Math.random() * 512;
+      const brightness = Math.random() * 30 - 15;
+      rCtx.fillStyle = `rgba(${brightness > 0 ? 255 : 0},${brightness > 0 ? 255 : 0},${brightness > 0 ? 255 : 0},${Math.abs(brightness) / 100})`;
+      rCtx.fillRect(x, 0, 1, 64);
+    }
+
+    const ringTex = new THREE.CanvasTexture(ringCanvas);
+    const ringGeo = new THREE.RingGeometry(cfg.inner, cfg.outer, 128);
+    const ringMat = new THREE.MeshStandardMaterial({
+      map: ringTex,
+      side: THREE.DoubleSide,
+      transparent: true,
+      opacity: 0.9,
+      roughness: cfg.roughness,
+      metalness: 0.1
+    });
+    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+    ringMesh.rotation.x = -Math.PI * 0.45; // Tilt rings
+    saturnGroup.add(ringMesh);
+  });
+
+  // Orbiting particles
+  const particleCount = 800;
+  const particleGeo = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  const colors = new Float32Array(particleCount * 3);
+  const sizes = new Float32Array(particleCount);
+
+  for (let i = 0; i < particleCount; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const radius = 3.5 + Math.random() * 3.5;
+    const height = (Math.random() - 0.5) * 0.5;
+    positions[i * 3] = Math.cos(angle) * radius;
+    positions[i * 3 + 1] = height;
+    positions[i * 3 + 2] = Math.sin(angle) * radius;
+
+    const gold = Math.random() > 0.5;
+    colors[i * 3] = gold ? 1.0 : 0.85;
+    colors[i * 3 + 1] = gold ? 0.85 : 0.75;
+    colors[i * 3 + 2] = gold ? 0.5 : 0.4;
+
+    sizes[i] = 0.03 + Math.random() * 0.06;
+  }
+
+  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  particleGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+
+  const particleMat = new THREE.PointsMaterial({
+    size: 0.08,
+    vertexColors: true,
+    transparent: true,
+    opacity: 0.8,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
+  });
+  const particles = new THREE.Points(particleGeo, particleMat);
+  particles.rotation.x = -Math.PI * 0.45;
+  saturnGroup.add(particles);
+
+  // Resize handler
   function resize() {
-    const r = wrap.getBoundingClientRect();
-    c.width = r.width * 2;
-    c.height = r.height * 2;
-    c.style.width = r.width + 'px';
-    c.style.height = r.height + 'px';
+    const w = wrap.clientWidth;
+    const h = wrap.clientHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
   }
   resize();
   window.addEventListener('resize', resize);
-  setTimeout(resize, 200);
 
-  // Particles
-  const parts = [];
-  for (let i = 0; i < 250; i++) {
-    const a = Math.random() * Math.PI * 2;
-    const d = Math.random() * 220 + 130;
-    parts.push({
-      a, d,
-      r: Math.random() * 2 + 0.5,
-      alpha: Math.random() * 0.8 + 0.2,
-      speed: (Math.random() * 0.004 + 0.002) * (Math.random() > 0.5 ? 1 : -1),
-      z: Math.random() * 2 - 1,
-      gold: Math.random() > 0.6
-    });
+  // Mouse interaction
+  let mouseX = 0, mouseY = 0;
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+    mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+  });
+
+  // Animation loop
+  let time = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+    time += 0.016;
+
+    // Slow planet rotation
+    planet.rotation.y += 0.002;
+
+    // Gentle ring rotation
+    saturnGroup.rotation.y = Math.sin(time * 0.1) * 0.05;
+
+    // Particle orbital motion
+    const posArray = particles.geometry.attributes.position.array;
+    for (let i = 0; i < particleCount; i++) {
+      const x = posArray[i * 3];
+      const z = posArray[i * 3 + 2];
+      const angle = Math.atan2(z, x) + 0.003;
+      const radius = Math.sqrt(x * x + z * z);
+      posArray[i * 3] = Math.cos(angle) * radius;
+      posArray[i * 3 + 2] = Math.sin(angle) * radius;
+    }
+    particles.geometry.attributes.position.needsUpdate = true;
+
+    // Camera follows mouse slightly
+    camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.02;
+    camera.position.y += (3 + mouseY * 0.8 - camera.position.y) * 0.02;
+    camera.lookAt(0, 0, 0);
+
+    // Glow pulse
+    glowMat.uniforms = { intensity: 0.5 + Math.sin(time) * 0.1 };
+
+    renderer.render(scene, camera);
   }
-
-  let t = 0;
-  function draw() {
-    t += 0.016;
-    const w = c.width, h = c.height;
-    const cx = w / 2, cy = h / 2;
-    const R = 95;
-
-    ctx.clearRect(0, 0, w, h);
-
-    // Outer glow
-    const og = ctx.createRadialGradient(cx, cy, R * 0.5, cx, cy, R * 2.5);
-    og.addColorStop(0, 'rgba(212,168,85,0.2)');
-    og.addColorStop(0.5, 'rgba(180,130,60,0.08)');
-    og.addColorStop(1, 'transparent');
-    ctx.fillStyle = og;
-    ctx.fillRect(0, 0, w, h);
-
-    // Pulsing glow
-    const pg = ctx.createRadialGradient(cx, cy, R, cx, cy, R * 1.8);
-    const pa = 0.06 + Math.sin(t * 1.5) * 0.025;
-    pg.addColorStop(0, `rgba(255,220,150,${pa})`);
-    pg.addColorStop(1, 'transparent');
-    ctx.fillStyle = pg;
-    ctx.fillRect(0, 0, w, h);
-
-    ctx.save();
-    ctx.translate(cx, cy);
-
-    // Back rings
-    ctx.save();
-    ctx.scale(1, 0.35);
-    ctx.rotate(-0.2);
-    for (let i = 0; i < 10; i++) {
-      const rr = R + 25 + i * 16;
-      const ba = 0.25 - i * 0.018;
-      if (ba <= 0) continue;
-      const hue = 35 + Math.sin(i * 0.5) * 10;
-      ctx.beginPath();
-      ctx.arc(0, 0, rr, 0, Math.PI);
-      const rg = ctx.createLinearGradient(-rr, 0, rr, 0);
-      rg.addColorStop(0, `hsla(${hue},60%,50%,0)`);
-      rg.addColorStop(0.3, `hsla(${hue},60%,50%,${ba * 0.3})`);
-      rg.addColorStop(0.5, `hsla(${hue + 10},75%,55%,${ba * 1.3})`);
-      rg.addColorStop(0.7, `hsla(${hue + 5},65%,52%,${ba})`);
-      rg.addColorStop(1, `hsla(${hue},60%,50%,0)`);
-      ctx.strokeStyle = rg;
-      ctx.lineWidth = 8 + Math.random() * 2;
-      ctx.stroke();
-    }
-    ctx.restore();
-
-    // Planet body
-    const pgr = ctx.createRadialGradient(-R * 0.3, -R * 0.3, R * 0.05, 0, 0, R);
-    pgr.addColorStop(0, '#f5ddaa');
-    pgr.addColorStop(0.15, '#e8c578');
-    pgr.addColorStop(0.35, '#d4a855');
-    pgr.addColorStop(0.55, '#c4953f');
-    pgr.addColorStop(0.75, '#a07030');
-    pgr.addColorStop(0.9, '#6b4420');
-    pgr.addColorStop(1, '#3b2210');
-
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(0, 0, R, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.fillStyle = pgr;
-    ctx.fillRect(-R, -R, R * 2, R * 2);
-
-    // Bands
-    for (let i = 0; i < 12; i++) {
-      const by = -R + (R * 2 / 12) * i;
-      const bh = R * 2 / 12;
-      const ba = 0.12 + Math.sin(i * 0.8) * 0.05;
-      const bg = ctx.createLinearGradient(-R, by, R, by);
-      const bHue = 30 + i * 3;
-      bg.addColorStop(0, `hsla(${bHue},50%,40%,0)`);
-      bg.addColorStop(0.3, `hsla(${bHue},60%,50%,${ba})`);
-      bg.addColorStop(0.5, `hsla(${bHue + 5},70%,55%,${ba * 1.5})`);
-      bg.addColorStop(0.7, `hsla(${bHue},60%,50%,${ba})`);
-      bg.addColorStop(1, `hsla(${bHue},50%,40%,0)`);
-      ctx.fillStyle = bg;
-      ctx.fillRect(-R, by, R * 2, bh);
-    }
-
-    // Shimmer
-    for (let i = 0; i < 20; i++) {
-      const y = -R + (R * 2 / 20) * i;
-      const sh = Math.sin(t * 0.5 + i * 0.3) * 0.02;
-      ctx.fillStyle = `rgba(255,230,180,${sh})`;
-      ctx.fillRect(-R, y, R * 2, R * 2 / 20);
-    }
-    ctx.restore();
-
-    // Night side
-    const ng = ctx.createRadialGradient(R * 0.5, R * 0.3, R * 0.15, 0, 0, R);
-    ng.addColorStop(0, 'rgba(5,3,15,0)');
-    ng.addColorStop(0.5, 'rgba(5,3,15,0.25)');
-    ng.addColorStop(0.8, 'rgba(5,3,15,0.55)');
-    ng.addColorStop(1, 'rgba(5,3,15,0.8)');
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(0, 0, R, 0, Math.PI * 2);
-    ctx.clip();
-    ctx.fillStyle = ng;
-    ctx.fillRect(-R, -R, R * 2, R * 2);
-    ctx.restore();
-
-    // Rim light
-    ctx.beginPath();
-    ctx.arc(0, 0, R - 0.5, 0, Math.PI * 2);
-    const rg2 = ctx.createLinearGradient(-R, -R, R, R);
-    rg2.addColorStop(0, 'rgba(255,230,180,0.5)');
-    rg2.addColorStop(0.3, 'rgba(255,210,150,0.25)');
-    rg2.addColorStop(0.7, 'rgba(200,160,80,0.15)');
-    rg2.addColorStop(1, 'rgba(100,70,30,0)');
-    ctx.strokeStyle = rg2;
-    ctx.lineWidth = 2.5;
-    ctx.stroke();
-
-    // Front rings
-    ctx.save();
-    ctx.scale(1, 0.35);
-    ctx.rotate(-0.2);
-    for (let i = 0; i < 10; i++) {
-      const rr = R + 25 + i * 16;
-      const ba = 0.35 - i * 0.025;
-      if (ba <= 0) continue;
-      const hue = 38 + Math.sin(i * 0.5 + t * 0.3) * 8;
-      ctx.beginPath();
-      ctx.arc(0, 0, rr, Math.PI, Math.PI * 2);
-      const rg3 = ctx.createLinearGradient(-rr, 0, rr, 0);
-      rg3.addColorStop(0, `hsla(${hue},65%,55%,0)`);
-      rg3.addColorStop(0.2, `hsla(${hue},65%,55%,${ba * 0.4})`);
-      rg3.addColorStop(0.5, `hsla(${hue + 10},80%,60%,${ba * 1.6})`);
-      rg3.addColorStop(0.8, `hsla(${hue},65%,55%,${ba * 0.4})`);
-      rg3.addColorStop(1, `hsla(${hue},65%,55%,0)`);
-      ctx.strokeStyle = rg3;
-      ctx.lineWidth = 7 + Math.sin(i * 0.4) * 3;
-      ctx.stroke();
-    }
-
-    // Ring glow
-    for (let i = 2; i < 8; i++) {
-      const rr = R + 25 + i * 16;
-      const ga = 0.04 + Math.sin(t + i) * 0.015;
-      ctx.beginPath();
-      ctx.arc(0, 0, rr, Math.PI, Math.PI * 2);
-      ctx.strokeStyle = `rgba(255,210,130,${ga})`;
-      ctx.lineWidth = 15;
-      ctx.filter = 'blur(4px)';
-      ctx.stroke();
-      ctx.filter = 'none';
-    }
-    ctx.restore();
-
-    // Particles
-    parts.forEach(p => {
-      p.a += p.speed;
-      const px = Math.cos(p.a) * p.d;
-      const py = Math.sin(p.a) * p.d * 0.35 + p.z * 15;
-      const tw = 0.7 + Math.sin(t * 3 + p.a) * 0.3;
-      ctx.beginPath();
-      ctx.arc(px, py, p.r * 2, 0, Math.PI * 2);
-      ctx.fillStyle = p.gold ? `rgba(255,200,80,${tw * 0.15})` : `rgba(220,180,120,${tw * 0.15})`;
-      ctx.fill();
-      ctx.beginPath();
-      ctx.arc(px, py, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = p.gold ? `rgba(255,200,80,${p.alpha * tw})` : `rgba(220,180,120,${p.alpha * tw})`;
-      ctx.fill();
-    });
-
-    ctx.restore();
-    requestAnimationFrame(draw);
-  }
-  draw();
+  animate();
 })();
 </script>
 </body>
