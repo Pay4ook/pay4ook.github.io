@@ -1,4 +1,4 @@
-﻿﻿// Mobile menu
+﻿﻿﻿// Mobile menu
 const burger = document.getElementById('burger');
 const mnav = document.getElementById('mnav');
 const mnavOverlay = document.getElementById('mnavOverlay');
@@ -208,7 +208,12 @@ document.querySelectorAll('.star').forEach(star => {
   const style = star.getAttribute('style') || '';
   // Remove invalid --o property
   const cleaned = style.replace(/;?--o:[^;"]*/, '').replace(/^;/, '');
-  if (cleaned) star.setAttribute('style', cleaned);
+  // Set minimum size so stars are visible
+  if (!style.includes('width') || style.match(/width:\dpx;/)) {
+    const newWidth = 2 + Math.floor(Math.random() * 3);
+    const newHeight = 2 + Math.floor(Math.random() * 3);
+    star.setAttribute('style', (cleaned || '') + `; width:${newWidth}px; height:${newHeight}px;`);
+  }
   // Set random animation-delay
   star.style.animationDelay = (Math.random() * 5).toFixed(2) + 's';
 });
