@@ -16,12 +16,20 @@
 html { scroll-behavior: smooth; }
 body {
   font-family: 'Inter', -apple-system, sans-serif;
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  z-index: 0;
   position: relative;
+}
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: var(--bg);
+  z-index: -3;
+  pointer-events: none;
 }
 .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
 a { color: inherit; text-decoration: none; }
@@ -166,7 +174,6 @@ img { max-width: 100%; display: block; }
   padding: 80px 0 100px; position: relative; overflow: hidden;
   border-bottom: 1px solid var(--border);
   background: linear-gradient(180deg, #050508 0%, #0a0a0a 40%, #0a0a0a 100%);
-  z-index: 1;
 }
 .hero-bg-grid {
   position: absolute; inset: 0; z-index: 0;
@@ -587,7 +594,7 @@ h1 {
 .section-header p { color: var(--text-muted); font-size: 16px; }
 
 /* ========== RIGS ========== */
-.rigs { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; z-index: 1; }
+.rigs { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; }
 .rigs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
 .rig-card {
   background: var(--bg2); border: 1px solid var(--border);
@@ -630,7 +637,7 @@ h1 {
 }
 
 /* ========== CONFIGURATOR ========== */
-.configurator { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; z-index: 1; }
+.configurator { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; }
 .config-layout { display: grid; grid-template-columns: 300px 1fr; gap: 40px; }
 .config-sidebar { position: sticky; top: 100px; }
 .config-preview {
@@ -683,7 +690,7 @@ h1 {
 }
 
 /* ========== COMPONENTS ========== */
-.components { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; z-index: 1; }
+.components { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; }
 .components-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
 .comp-card {
   background: var(--bg2); border: 1px solid var(--border);
@@ -706,7 +713,7 @@ h1 {
 }
 
 /* ========== REVIEWS ========== */
-.reviews { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; z-index: 1; }
+.reviews { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; }
 .reviews-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
 .review-card {
   background: var(--bg2); border: 1px solid var(--border);
@@ -724,7 +731,7 @@ h1 {
 }
 
 /* ========== CONTACTS ========== */
-.contacts { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; z-index: 1; }
+.contacts { padding: 80px 0; border-bottom: 1px solid var(--border); position: relative; }
 .contact-cards { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
 .contact-card {
   display: flex; flex-direction: column; align-items: center; gap: 12px;
