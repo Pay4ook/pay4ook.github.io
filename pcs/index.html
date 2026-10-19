@@ -1117,257 +1117,192 @@ function copyPromo(btn) {
 (function() {
   const wrap = document.getElementById('saturnScene');
   if (!wrap) return;
-  
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-  camera.position.set(0, 3, 12);
-  camera.lookAt(0, 0, 0);
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.5;
-  wrap.appendChild(renderer.domElement);
+  const canvas = document.createElement('canvas');
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+  canvas.style.display = 'block';
+  wrap.appendChild(canvas);
 
-  // Lighting setup for volumetric look
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-  scene.add(ambientLight);
+  const ctx = canvas.getContext('2d');
+  let W, H, cx, cy;
 
-  const sunLight = new THREE.DirectionalLight(0xfff5e6, 2.5);
-  sunLight.position.set(5, 3, 5);
-  scene.add(sunLight);
-
-  const backLight = new THREE.DirectionalLight(0xffd4a0, 1.0);
-  backLight.position.set(-3, -2, -5);
-  scene.add(backLight);
-
-  const rimLight = new THREE.PointLight(0xffeedd, 1.5, 20);
-  rimLight.position.set(-4, 4, 4);
-  scene.add(rimLight);
-
-  // Saturn group
-  const saturnGroup = new THREE.Group();
-  scene.add(saturnGroup);
-
-  // Create planet texture procedurally
-  const planetCanvas = document.createElement('canvas');
-  planetCanvas.width = 512;
-  planetCanvas.height = 256;
-  const pCtx = planetCanvas.getContext('2d');
-
-  // Planet gradient base
-  const pGrad = pCtx.createLinearGradient(0, 0, 0, 256);
-  pGrad.addColorStop(0, '#4a2a15');
-  pGrad.addColorStop(0.2, '#8a5a30');
-  pGrad.addColorStop(0.4, '#c4953f');
-  pGrad.addColorStop(0.5, '#d4a855');
-  pGrad.addColorStop(0.6, '#c4953f');
-  pGrad.addColorStop(0.8, '#8a5a30');
-  pGrad.addColorStop(1, '#4a2a15');
-  pCtx.fillStyle = pGrad;
-  pCtx.fillRect(0, 0, 512, 256);
-
-  // Add bands
-  for (let i = 0; i < 15; i++) {
-    const y = (256 / 15) * i;
-    const bandH = 256 / 15;
-    const alpha = 0.1 + Math.random() * 0.15;
-    pCtx.fillStyle = `rgba(${120 + Math.random() * 80}, ${80 + Math.random() * 60}, ${40 + Math.random() * 30}, ${alpha})`;
-    pCtx.fillRect(0, y, 512, bandH);
-  }
-
-  // Add shimmer
-  for (let i = 0; i < 100; i++) {
-    pCtx.fillStyle = `rgba(255, 230, 180, ${Math.random() * 0.05})`;
-    pCtx.fillRect(Math.random() * 512, Math.random() * 256, 20, 2);
-  }
-
-  const planetTexture = new THREE.CanvasTexture(planetCanvas);
-
-  // PLANET - увеличил с 2.2 до 3.0
-  const planetGeo = new THREE.SphereGeometry(3.0, 64, 64);
-  const planetMat = new THREE.MeshStandardMaterial({
-    map: planetTexture,
-    roughness: 0.7,
-    metalness: 0.1,
-    emissive: new THREE.Color(0xffd4a0),
-    emissiveIntensity: 0.15
-  });
-  const planet = new THREE.Mesh(planetGeo, planetMat);
-  saturnGroup.add(planet);
-
-  // Atmosphere glow - увеличил с 2.4 до 3.3
-  const glowGeo = new THREE.SphereGeometry(3.3, 64, 64);
-  const glowMat = new THREE.ShaderMaterial({
-    vertexShader: `
-      varying vec3 vNormal;
-      void main() {
-        vNormal = normalize(normalMatrix * normal);
-        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-      }
-    `,
-    fragmentShader: `
-      varying vec3 vNormal;
-      void main() {
-        float intensity = pow(0.65 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
-        gl_FragColor = vec4(1.0, 0.85, 0.6, intensity * 0.6);
-      }
-    `,
-    blending: THREE.AdditiveBlending,
-    side: THREE.BackSide,
-    transparent: true
-  });
-  const glow = new THREE.Mesh(glowGeo, glowMat);
-  saturnGroup.add(glow);
-
-  // Saturn rings - multiple layers
-  const ringConfigs = [
-    { inner: 3.0, outer: 3.4, color: 0x8a7a5a, opacity: 0.5, roughness: 0.9 },
-    { inner: 3.4, outer: 3.8, color: 0xb89a6a, opacity: 0.7, roughness: 0.8 },
-    { inner: 3.8, outer: 4.5, color: 0xc8a868, opacity: 0.85, roughness: 0.7 },
-    { inner: 4.5, outer: 4.7, color: 0x888888, opacity: 0.3, roughness: 1.0 }, // Cassini division
-    { inner: 4.7, outer: 5.3, color: 0xd0b070, opacity: 0.7, roughness: 0.8 },
-    { inner: 5.3, outer: 5.7, color: 0xc0a060, opacity: 0.6, roughness: 0.85 },
-    { inner: 5.7, outer: 5.9, color: 0x999999, opacity: 0.2, roughness: 1.0 }, // Encke gap
-    { inner: 5.9, outer: 6.4, color: 0xc8a868, opacity: 0.5, roughness: 0.9 }
-  ];
-
-  ringConfigs.forEach(cfg => {
-    const ringCanvas = document.createElement('canvas');
-    ringCanvas.width = 512;
-    ringCanvas.height = 64;
-    const rCtx = ringCanvas.getContext('2d');
-
-    // Ring gradient
-    const rGrad = rCtx.createLinearGradient(0, 0, 512, 0);
-    const c = new THREE.Color(cfg.color);
-    rGrad.addColorStop(0, `rgba(0,0,0,0)`);
-    rGrad.addColorStop(0.1, `rgba(${Math.floor(c.r*255)},${Math.floor(c.g*255)},${Math.floor(c.b*255)},${cfg.opacity})`);
-    rGrad.addColorStop(0.5, `rgba(${Math.floor(c.r*255*1.1)},${Math.floor(c.g*255*1.1)},${Math.floor(c.b*255*1.1)},${cfg.opacity * 1.2})`);
-    rGrad.addColorStop(0.9, `rgba(${Math.floor(c.r*255)},${Math.floor(c.g*255)},${Math.floor(c.b*255)},${cfg.opacity})`);
-    rGrad.addColorStop(1, `rgba(0,0,0,0)`);
-    rCtx.fillStyle = rGrad;
-    rCtx.fillRect(0, 0, 512, 64);
-
-    // Add texture noise to ring
-    for (let i = 0; i < 500; i++) {
-      const x = Math.random() * 512;
-      const brightness = Math.random() * 30 - 15;
-      rCtx.fillStyle = `rgba(${brightness > 0 ? 255 : 0},${brightness > 0 ? 255 : 0},${brightness > 0 ? 255 : 0},${Math.abs(brightness) / 100})`;
-      rCtx.fillRect(x, 0, 1, 64);
-    }
-
-    const ringTex = new THREE.CanvasTexture(ringCanvas);
-    const ringGeo = new THREE.RingGeometry(cfg.inner, cfg.outer, 128);
-    const ringMat = new THREE.MeshStandardMaterial({
-      map: ringTex,
-      side: THREE.DoubleSide,
-      transparent: true,
-      opacity: 0.9,
-      roughness: cfg.roughness,
-      metalness: 0.1
-    });
-    const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-    // Наклон колец ~30 градусов
-    ringMesh.rotation.x = -0.52;
-    saturnGroup.add(ringMesh);
-  });
-
-  // Orbiting particles
-  const particleCount = 800;
-  const particleGeo = new THREE.BufferGeometry();
-  const positions = new Float32Array(particleCount * 3);
-  const colors = new Float32Array(particleCount * 3);
-  const sizes = new Float32Array(particleCount);
-
-  for (let i = 0; i < particleCount; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const radius = 3.5 + Math.random() * 3.5;
-    const height = (Math.random() - 0.5) * 0.5;
-    positions[i * 3] = Math.cos(angle) * radius;
-    positions[i * 3 + 1] = height;
-    positions[i * 3 + 2] = Math.sin(angle) * radius;
-
-    const gold = Math.random() > 0.5;
-    colors[i * 3] = gold ? 1.0 : 0.85;
-    colors[i * 3 + 1] = gold ? 0.85 : 0.75;
-    colors[i * 3 + 2] = gold ? 0.5 : 0.4;
-
-    sizes[i] = 0.03 + Math.random() * 0.06;
-  }
-
-  particleGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  particleGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  particleGeo.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-
-  const particleMat = new THREE.PointsMaterial({
-    size: 0.08,
-    vertexColors: true,
-    transparent: true,
-    opacity: 0.8,
-    blending: THREE.AdditiveBlending,
-    depthWrite: false
-  });
-  const particles = new THREE.Points(particleGeo, particleMat);
-  particles.rotation.x = -Math.PI * 0.45;
-  saturnGroup.add(particles);
-
-  // Resize handler
   function resize() {
-    const w = wrap.clientWidth;
-    const h = wrap.clientHeight;
-    renderer.setSize(w, h);
-    camera.aspect = w / h;
-    camera.updateProjectionMatrix();
+    W = canvas.width = wrap.clientWidth * 2;
+    H = canvas.height = wrap.clientHeight * 2;
+    canvas.style.width = wrap.clientWidth + 'px';
+    canvas.style.height = wrap.clientHeight + 'px';
+    cx = W / 2;
+    cy = H / 2;
   }
+
   resize();
   window.addEventListener('resize', resize);
 
-  // Mouse interaction
-  let mouseX = 0, mouseY = 0;
-  document.addEventListener('mousemove', (e) => {
-    mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-    mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-  });
+  // Кольцевые частицы — 500 штук
+  const ringParticles = [];
+  for (let i = 0; i < 500; i++) {
+    ringParticles.push({
+      angle: Math.random() * Math.PI * 2,
+      radius: 120 + Math.random() * 100,
+      speed: 0.0005 + Math.random() * 0.001,
+      size: 0.5 + Math.random() * 2,
+      alpha: 0.3 + Math.random() * 0.7,
+      color: ['#e8b85a', '#d4a040', '#c89830', '#b89040', '#f0c860'][Math.floor(Math.random() * 5)]
+    });
+  }
 
-  // Animation loop
+  // Фоновые звёзды
+  const bgStars = [];
+  for (let i = 0; i < 200; i++) {
+    bgStars.push({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      size: Math.random() * 1.5 + 0.5,
+      alpha: 0.3 + Math.random() * 0.7,
+      twinkleSpeed: 0.02 + Math.random() * 0.03
+    });
+  }
+
   let time = 0;
+
+  function drawPlanet(px, py, r) {
+    // 3D shading
+    const grad = ctx.createRadialGradient(px - r * 0.3, py - r * 0.3, r * 0.1, px, py, r);
+    grad.addColorStop(0, '#d4a855');
+    grad.addColorStop(0.3, '#c4953f');
+    grad.addColorStop(0.6, '#8a5a30');
+    grad.addColorStop(1, '#4a2a15');
+    ctx.beginPath();
+    ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.fillStyle = grad;
+    ctx.fill();
+
+    // Полосы
+    for (let i = 0; i < 12; i++) {
+      const y = py - r + (2 * r / 12) * i;
+      const bandH = 2 * r / 12;
+      const alpha = 0.05 + Math.random() * 0.1;
+      ctx.fillStyle = `rgba(${140 + i * 5}, ${100 + i * 3}, ${50 + i * 2}, ${alpha})`;
+      ctx.fillRect(px - r, y, r * 2, bandH);
+    }
+
+    // Блик
+    const specGrad = ctx.createRadialGradient(px - r * 0.35, py - r * 0.35, 0, px - r * 0.35, py - r * 0.35, r * 0.5);
+    specGrad.addColorStop(0, 'rgba(255, 240, 200, 0.25)');
+    specGrad.addColorStop(1, 'rgba(255, 240, 200, 0)');
+    ctx.beginPath();
+    ctx.arc(px, py, r, 0, Math.PI * 2);
+    ctx.fillStyle = specGrad;
+    ctx.fill();
+  }
+
+  function drawRingSection(startAngle, endAngle, innerR, outerR, alpha) {
+    const segments = 60;
+    for (let i = 0; i < segments; i++) {
+      const a1 = startAngle + (endAngle - startAngle) * i / segments;
+      const a2 = startAngle + (endAngle - startAngle) * (i + 1) / segments;
+
+      const colors = [
+        'rgba(200, 168, 104, 0.5)',
+        'rgba(180, 148, 78, 0.7)',
+        'rgba(160, 130, 60, 0.4)',
+        'rgba(190, 158, 88, 0.6)',
+        'rgba(170, 140, 70, 0.5)'
+      ];
+
+      for (let ring = 0; ring < 5; ring++) {
+        const ri = innerR + (outerR - innerR) * (ring / 5);
+        const ro = innerR + (outerR - innerR) * ((ring + 1) / 5);
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, ro, a1, a2);
+        ctx.arc(cx, cy, ri, a2, a1, true);
+        ctx.closePath();
+        ctx.fillStyle = colors[ring];
+        ctx.globalAlpha = alpha;
+        ctx.fill();
+      }
+    }
+  }
+
   function animate() {
     requestAnimationFrame(animate);
-    time += 0.016;
+    time += 1;
 
-    // Slow planet rotation
-    planet.rotation.y += 0.002;
+    ctx.clearRect(0, 0, W, H);
 
-    // Ротация колец вокруг планеты
-    saturnGroup.children.forEach((child, idx) => {
-      if (idx > 1 && child.geometry && child.geometry.type === 'RingGeometry') {
-        child.rotation.z += 0.001 * (idx % 2 === 0 ? 1 : -1);
-      }
+    // Фоновые звёзды
+    bgStars.forEach(s => {
+      s.alpha = 0.3 + Math.sin(time * s.twinkleSpeed) * 0.4;
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255, 255, 255, ${s.alpha})`;
+      ctx.fill();
     });
 
-    // Particle orbital motion
-    const posArray = particles.geometry.attributes.position.array;
-    for (let i = 0; i < particleCount; i++) {
-      const x = posArray[i * 3];
-      const z = posArray[i * 3 + 2];
-      const angle = Math.atan2(z, x) + 0.003;
-      const radius = Math.sqrt(x * x + z * z);
-      posArray[i * 3] = Math.cos(angle) * radius;
-      posArray[i * 3 + 2] = Math.sin(angle) * radius;
-    }
-    particles.geometry.attributes.position.needsUpdate = true;
+    const planetR = 100;
+    const tilt = 0.4; // ~23 градуса наклон
 
-    // Camera follows mouse slightly
-    camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.02;
-    camera.position.y += (3 + mouseY * 0.8 - camera.position.y) * 0.02;
-    camera.lookAt(0, 0, 0);
+    // === BACK RINGS (за планетой) ===
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(tilt);
 
-    // Glow pulse
-    glowMat.uniforms = { intensity: 0.5 + Math.sin(time) * 0.1 };
+    // Задняя половина колец (верхняя, y < 0)
+    drawRingSection(-Math.PI, 0, 120, 220, 0.5);
 
-    renderer.render(scene, camera);
+    // Частицы задней половины
+    ringParticles.forEach(p => {
+      p.angle += p.speed;
+      const x = Math.cos(p.angle) * p.radius;
+      const y = Math.sin(p.angle) * p.radius;
+      if (Math.sin(p.angle) < 0) { // только задняя половина
+        ctx.beginPath();
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fill();
+      }
+    });
+    ctx.restore();
+
+    // === ПЛАНЕТА ===
+    drawPlanet(cx, cy, planetR);
+
+    // === FRONT RINGS (перед планетой) ===
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(tilt);
+
+    // Передняя половина колец (нижняя, y > 0)
+    drawRingSection(0, Math.PI, 120, 220, 0.7);
+
+    // Частицы передней половины
+    ringParticles.forEach(p => {
+      p.angle += p.speed;
+      const x = Math.cos(p.angle) * p.radius;
+      const y = Math.sin(p.angle) * p.radius;
+      if (Math.sin(p.angle) >= 0) { // только передняя половина
+        ctx.beginPath();
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fill();
+      }
+    });
+    ctx.restore();
+
+    // Свечение вокруг планеты
+    const glowGrad = ctx.createRadialGradient(cx, cy, planetR, cx, cy, planetR * 1.5);
+    glowGrad.addColorStop(0, 'rgba(232, 184, 90, 0.15)');
+    glowGrad.addColorStop(1, 'rgba(232, 184, 90, 0)');
+    ctx.beginPath();
+    ctx.arc(cx, cy, planetR * 1.5, 0, Math.PI * 2);
+    ctx.fillStyle = glowGrad;
+    ctx.fill();
   }
+
   animate();
 })();
 </script>
