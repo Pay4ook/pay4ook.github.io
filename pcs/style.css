@@ -276,9 +276,11 @@ img { max-width: 100%; display: block; }
 }
 .saturn-canvas-wrap {
   position: relative;
-  width: 500px;
-  height: 500px;
+  width: 550px;
+  height: 550px;
   flex-shrink: 0;
+  min-width: 550px;
+  min-height: 550px;
 }
 
 /* ===== Saturn Promo Card ===== */
