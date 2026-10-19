@@ -1,4 +1,4 @@
-﻿// Mobile menu
+﻿﻿// Mobile menu
 const burger = document.getElementById('burger');
 const mnav = document.getElementById('mnav');
 const mnavOverlay = document.getElementById('mnavOverlay');
@@ -200,6 +200,18 @@ if (form) {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 })();
+
+// ========================
+// FIX STARS
+// ========================
+document.querySelectorAll('.star').forEach(star => {
+  const style = star.getAttribute('style') || '';
+  // Remove invalid --o property
+  const cleaned = style.replace(/;?--o:[^;"]*/, '').replace(/^;/, '');
+  if (cleaned) star.setAttribute('style', cleaned);
+  // Set random animation-delay
+  star.style.animationDelay = (Math.random() * 5).toFixed(2) + 's';
+});
 
 // ========================
 // GSAP ANIMATIONS
