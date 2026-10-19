@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?r=99">
+<link rel="stylesheet" href="style.css?v=cosmos2026">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
@@ -1115,67 +1115,44 @@ function copyPromo(btn) {
 // VOLUMETRIC SATURN — Canvas 2D (как koltsa-saturn.vercel.app)
 // ========================
 (function() {
-  const wrap = document.getElementById('saturnScene');
-  if (!wrap) return;
+  // Ждём полной загрузки чтобы wrapper имел размеры от CSS (550x550)
+  window.addEventListener('load', initSaturn);
 
-  const canvas = document.createElement('canvas');
-  canvas.style.width = '100%';
-  canvas.style.height = '100%';
-  canvas.style.display = 'block';
-  wrap.appendChild(canvas);
+  function initSaturn() {
+    const wrap = document.getElementById('saturnScene');
+    if (!wrap) return;
 
-  const ctx = canvas.getContext('2d');
-  let W, H, cx, cy;
+    const w = wrap.clientWidth || 550;
+    const h = wrap.clientHeight || 550;
 
-  function resize() {
-    const dpr = window.devicePixelRatio || 1;
-    W = canvas.width = wrap.clientWidth * dpr;
-    H = canvas.height = wrap.clientHeight * dpr;
-    canvas.style.width = wrap.clientWidth + 'px';
-    canvas.style.height = wrap.clientHeight + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cx = wrap.clientWidth / 2;
-    cy = wrap.clientHeight / 2;
-  }
+    const canvas = document.createElement('canvas');
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.display = 'block';
+    canvas.width = w * 2;
+    canvas.height = h * 2;
+    wrap.appendChild(canvas);
 
-  resize();
-  window.addEventListener('resize', resize);
+    const ctx = canvas.getContext('2d');
+    const cx = w / 2;
+    const cy = h / 2;
 
   // Огромное количество частиц в кольце — 1000 штук
   const ringParticles = [];
   for (let i = 0; i < 1000; i++) {
-    const angle = Math.random() * Math.PI * 2;
-    const radius = 80 + Math.random() * 80; // 80-160 от центра
-    const speed = 0.002 + Math.random() * 0.005;
-    const size = 1 + Math.random() * 3;
-    const alpha = 0.4 + Math.random() * 0.6;
-    // Яркие золотые цвета
-    const colors = [
-      '#FFD700', '#FFC107', '#FFB300', '#FF8F00',
-      '#FFA000', '#FFD54F', '#FFCA28', '#FFE082',
-      '#FFF176', '#FFFFFF' // белые яркие для контраста
-    ];
     ringParticles.push({
-      angle, radius, speed, size, alpha,
-      color: colors[Math.floor(Math.random() * colors.length)]
+      angle: Math.random() * Math.PI * 2,
+      radius: 80 + Math.random() * 80,
+      speed: 0.002 + Math.random() * 0.005,
+      size: 1 + Math.random() * 3,
+      alpha: 0.4 + Math.random() * 0.6,
+      color: ['#FFD700', '#FFC107', '#FFB300', '#FF8F00', '#FFA000', '#FFD54F', '#FFCA28', '#FFE082', '#FFF176', '#FFFFFF'][Math.floor(Math.random() * 10)]
     });
   }
 
-  // Фоновые звёзды — 300 штук
   const bgStars = [];
-  for (let i = 0; i < 300; i++) {
-    bgStars.push({
-      x: Math.random() * (wrap.clientWidth || 800),
-      y: Math.random() * (wrap.clientHeight || 600),
-      size: Math.random() * 2 + 0.5,
-      alpha: 0.2 + Math.random() * 0.8,
-      twinkleSpeed: 0.01 + Math.random() * 0.04,
-      twinkleOffset: Math.random() * Math.PI * 2
-    });
-  }
-
   let time = 0;
-  const tilt = 0.45; // ~25 градусов наклон колец
+  const tilt = 0.45;
 
   function drawPlanet(px, py, r) {
     // Тёмный фон планеты (контраст с кольцом)
