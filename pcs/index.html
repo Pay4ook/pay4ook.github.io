@@ -1115,21 +1115,26 @@ function copyPromo(btn) {
 // VOLUMETRIC SATURN — Canvas 2D (как koltsa-saturn.vercel.app)
 // ========================
 (function() {
-  // Ждём полной загрузки чтобы wrapper имел размеры от CSS (550x550)
-  window.addEventListener('load', initSaturn);
+  // Ждём полной загрузки страницы чтобы wrapper получил размеры от CSS
+  window.addEventListener('load', function() {
+    // Дополнительная задержка чтобы CSS применил размеры
+    setTimeout(initSaturn, 100);
+  });
 
   function initSaturn() {
     const wrap = document.getElementById('saturnScene');
     if (!wrap) return;
 
+    // Получаем реальные размеры после применения CSS
     const w = wrap.clientWidth || 550;
     const h = wrap.clientHeight || 550;
 
+    // Создаём canvas с фиксированными размерами
     const canvas = document.createElement('canvas');
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     canvas.style.display = 'block';
-    canvas.width = w * 2;
+    canvas.width = w * 2; // DPR для чёткости
     canvas.height = h * 2;
     wrap.appendChild(canvas);
 
@@ -1155,46 +1160,45 @@ function copyPromo(btn) {
   const tilt = 0.45;
 
   function drawPlanet(px, py, r) {
-    // Тёмный фон планеты (контраст с кольцом)
     ctx.save();
     ctx.beginPath();
     ctx.arc(px, py, r, 0, Math.PI * 2);
     ctx.clip();
 
-    // Основной градиент планеты — объёмный
+    // Основной градиент планеты — ЯРКИЙ
     const grad = ctx.createRadialGradient(
       px - r * 0.35, py - r * 0.35, r * 0.05,
       px, py, r
     );
-    grad.addColorStop(0, '#F5E6C8');   // яркий блик
-    grad.addColorStop(0.15, '#E8C87A'); // светлое пятно
-    grad.addColorStop(0.4, '#C9A84C');  // золотой
-    grad.addColorStop(0.65, '#A07830'); // коричневый
-    grad.addColorStop(0.85, '#6B4F23'); // тёмный
+    grad.addColorStop(0, '#FFF5D4');   // очень яркий блик
+    grad.addColorStop(0.15, '#F5D98E'); // светлое пятно
+    grad.addColorStop(0.4, '#D4A84C');  // золотой
+    grad.addColorStop(0.65, '#B8862D'); // коричневый
+    grad.addColorStop(0.85, '#7A5218'); // тёмный
     grad.addColorStop(1, '#3D2E14');    // край
 
     ctx.fillStyle = grad;
     ctx.fillRect(px - r, py - r, r * 2, r * 2);
 
-    // Горизонтальные полосы Сатурна
+    // Горизонтальные полосы Сатурна — ЯРЧЕ
     for (let i = 0; i < 16; i++) {
       const y = py - r + (2 * r / 16) * i;
       const bandH = 2 * r / 16;
       const bright = Math.sin(i * 0.8) * 0.5 + 0.5;
-      const red = Math.floor(160 + bright * 60);
-      const green = Math.floor(120 + bright * 40);
-      const blue = Math.floor(40 + bright * 20);
-      ctx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${0.08 + Math.random() * 0.06})`;
+      const red = Math.floor(200 + bright * 55);
+      const green = Math.floor(160 + bright * 40);
+      const blue = Math.floor(80 + bright * 30);
+      ctx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${0.12 + Math.random() * 0.08})`;
       ctx.fillRect(px - r, y, r * 2, bandH);
     }
 
-    // Яркий блик от "Солнца"
+    // Яркий блик от "Солнца" — СИЛЬНЕЕ
     const specGrad = ctx.createRadialGradient(
       px - r * 0.35, py - r * 0.35, 0,
       px - r * 0.35, py - r * 0.35, r * 0.45
     );
-    specGrad.addColorStop(0, 'rgba(255, 255, 240, 0.35)');
-    specGrad.addColorStop(0.5, 'rgba(255, 250, 220, 0.1)');
+    specGrad.addColorStop(0, 'rgba(255, 255, 240, 0.45)');
+    specGrad.addColorStop(0.5, 'rgba(255, 250, 220, 0.15)');
     specGrad.addColorStop(1, 'rgba(255, 250, 220, 0)');
     ctx.fillStyle = specGrad;
     ctx.fillRect(px - r, py - r, r * 2, r * 2);
@@ -1202,8 +1206,8 @@ function copyPromo(btn) {
     // Контур планеты
     ctx.beginPath();
     ctx.arc(px, py, r, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(200, 168, 104, 0.3)';
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(220, 190, 130, 0.5)';
+    ctx.lineWidth = 2;
     ctx.stroke();
 
     ctx.restore();
@@ -1289,8 +1293,8 @@ function copyPromo(btn) {
     const cw = wrap.clientWidth;
     const ch = wrap.clientHeight;
 
-    // Тёмный фон секции
-    ctx.fillStyle = '#050508';
+    // Тёмный фон секции (совпадает с CSS)
+    ctx.fillStyle = '#0a0a0a';
     ctx.fillRect(0, 0, cw, ch);
 
     // Фоновые звёзды
@@ -1302,8 +1306,8 @@ function copyPromo(btn) {
       ctx.fill();
     });
 
-    // Планета
-    const planetR = Math.min(cw, ch) * 0.2; // Размер = 20% от меньшей стороны
+    // Планета — УВЕЛИЧИЛ до 35%!
+    const planetR = Math.min(cw, ch) * 0.35;
 
     // === BACK RINGS (за планетой) ===
     ctx.save();
