@@ -294,7 +294,7 @@ img { max-width: 100%; display: block; }
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
   background: transparent;
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
@@ -317,6 +317,7 @@ img { max-width: 100%; display: block; }
   flex-shrink: 0;
   min-width: 550px;
   min-height: 550px;
+  overflow: visible;
 }
 
 /* ===== Saturn Promo Card ===== */
@@ -382,7 +383,7 @@ img { max-width: 100%; display: block; }
 
 @media (max-width: 768px) {
   .saturn-container { flex-direction: column; gap: 30px; }
-  .saturn-canvas-wrap { width: 350px; height: 350px; }
+  .saturn-canvas-wrap { width: 350px; height: 350px; overflow: visible; }
   .saturn-section { min-height: auto; }
 }
 
