@@ -1112,263 +1112,294 @@ function copyPromo(btn) {
 }
 
 // ========================
-// VOLUMETRIC SATURN — Canvas 2D (как koltsa-saturn.vercel.app)
+// SATURN — Volumetric 3D (koltsa-saturn.vercel.app)
 // ========================
 (function() {
-  // Ждём полной загрузки страницы чтобы wrapper получил размеры от CSS
   window.addEventListener('load', function() {
-    // Дополнительная задержка чтобы CSS применил размеры
-    setTimeout(initSaturn, 100);
+    setTimeout(initSaturn, 200);
   });
 
   function initSaturn() {
     const wrap = document.getElementById('saturnScene');
     if (!wrap) return;
 
-    // Получаем реальные размеры после применения CSS
     const w = wrap.clientWidth || 550;
     const h = wrap.clientHeight || 550;
 
-    // Создаём canvas с фиксированными размерами
     const canvas = document.createElement('canvas');
     canvas.style.width = '100%';
     canvas.style.height = '100%';
     canvas.style.display = 'block';
-    canvas.width = w * 2; // DPR для чёткости
+    canvas.width = w * 2;
     canvas.height = h * 2;
     wrap.appendChild(canvas);
 
     const ctx = canvas.getContext('2d');
     const cx = w / 2;
     const cy = h / 2;
+    const scale = Math.min(w, h) / 550;
 
-  // Огромное количество частиц в кольце — 1000 штук
-  const ringParticles = [];
-  for (let i = 0; i < 1000; i++) {
-    ringParticles.push({
-      angle: Math.random() * Math.PI * 2,
-      radius: 80 + Math.random() * 80,
-      speed: 0.002 + Math.random() * 0.005,
-      size: 1 + Math.random() * 3,
-      alpha: 0.4 + Math.random() * 0.6,
-      color: ['#FFD700', '#FFC107', '#FFB300', '#FF8F00', '#FFA000', '#FFD54F', '#FFCA28', '#FFE082', '#FFF176', '#FFFFFF'][Math.floor(Math.random() * 10)]
-    });
-  }
-
-  const bgStars = [];
-  let time = 0;
-  const tilt = 0.45;
-
-  function drawPlanet(px, py, r) {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(px, py, r, 0, Math.PI * 2);
-    ctx.clip();
-
-    // Основной градиент планеты — ЯРКИЙ
-    const grad = ctx.createRadialGradient(
-      px - r * 0.35, py - r * 0.35, r * 0.05,
-      px, py, r
-    );
-    grad.addColorStop(0, '#FFF5D4');   // очень яркий блик
-    grad.addColorStop(0.15, '#F5D98E'); // светлое пятно
-    grad.addColorStop(0.4, '#D4A84C');  // золотой
-    grad.addColorStop(0.65, '#B8862D'); // коричневый
-    grad.addColorStop(0.85, '#7A5218'); // тёмный
-    grad.addColorStop(1, '#3D2E14');    // край
-
-    ctx.fillStyle = grad;
-    ctx.fillRect(px - r, py - r, r * 2, r * 2);
-
-    // Горизонтальные полосы Сатурна — ЯРЧЕ
-    for (let i = 0; i < 16; i++) {
-      const y = py - r + (2 * r / 16) * i;
-      const bandH = 2 * r / 16;
-      const bright = Math.sin(i * 0.8) * 0.5 + 0.5;
-      const red = Math.floor(200 + bright * 55);
-      const green = Math.floor(160 + bright * 40);
-      const blue = Math.floor(80 + bright * 30);
-      ctx.fillStyle = `rgba(${red}, ${green}, ${blue}, ${0.12 + Math.random() * 0.08})`;
-      ctx.fillRect(px - r, y, r * 2, bandH);
+    // Фон звёзды
+    const bgStars = [];
+    for (let i = 0; i < 300; i++) {
+      bgStars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        size: Math.random() * 1.5,
+        twinkleSpeed: 0.01 + Math.random() * 0.03,
+        twinkleOffset: Math.random() * Math.PI * 2
+      });
     }
 
-    // Яркий блик от "Солнца" — СИЛЬНЕЕ
-    const specGrad = ctx.createRadialGradient(
-      px - r * 0.35, py - r * 0.35, 0,
-      px - r * 0.35, py - r * 0.35, r * 0.45
-    );
-    specGrad.addColorStop(0, 'rgba(255, 255, 240, 0.45)');
-    specGrad.addColorStop(0.5, 'rgba(255, 250, 220, 0.15)');
-    specGrad.addColorStop(1, 'rgba(255, 250, 220, 0)');
-    ctx.fillStyle = specGrad;
-    ctx.fillRect(px - r, py - r, r * 2, r * 2);
+    // Частицы кольца — 1200 шт
+    const ringParticles = [];
+    const ringColors = [
+      '#FFD700', '#FFC107', '#FFB300', '#FF8F00',
+      '#FFA000', '#FFD54F', '#FFCA28', '#FFE082',
+      '#FFF8E1', '#FFFFFF', '#FFE0B2', '#FFCC80'
+    ];
+    for (let i = 0; i < 1200; i++) {
+      const r = 90 + Math.random() * 110;
+      const angle = Math.random() * Math.PI * 2;
+      ringParticles.push({
+        angle: angle,
+        radius: r,
+        speed: (0.001 + Math.random() * 0.004) * (Math.random() > 0.5 ? 1 : -1),
+        size: 0.5 + Math.random() * 2.5,
+        alpha: 0.3 + Math.random() * 0.7,
+        color: ringColors[Math.floor(Math.random() * ringColors.length)],
+        yOffset: (Math.random() - 0.5) * 3
+      });
+    }
 
-    // Контур планеты
-    ctx.beginPath();
-    ctx.arc(px, py, r, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(220, 190, 130, 0.5)';
-    ctx.lineWidth = 2;
-    ctx.stroke();
+    let time = 0;
 
-    ctx.restore();
-  }
+    function drawPlanet(px, py, r) {
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI * 2);
+      ctx.clip();
 
-  function drawRingHalf(inside, startAngle, endAngle) {
-    // Рисуем половинку кольца с сегментами
-    const segments = 90;
-    for (let i = 0; i < segments; i++) {
-      const a1 = startAngle + (endAngle - startAngle) * i / segments;
-      const a2 = startAngle + (endAngle - startAngle) * (i + 1) / segments;
+      // Базовый градиент
+      const grad = ctx.createRadialGradient(
+        px - r * 0.3, py - r * 0.3, r * 0.1,
+        px, py, r
+      );
+      grad.addColorStop(0, '#FFF8E1');
+      grad.addColorStop(0.2, '#FFE082');
+      grad.addColorStop(0.4, '#FFC107');
+      grad.addColorStop(0.6, '#D4941C');
+      grad.addColorStop(0.8, '#8B6914');
+      grad.addColorStop(1, '#4A3510');
+      ctx.fillStyle = grad;
+      ctx.fillRect(px - r, py - r, r * 2, r * 2);
 
-      // 8 полос колец
-      for (let band = 0; band < 8; band++) {
-        const t1 = band / 8;
-        const t2 = (band + 1) / 8;
-        const ri = 80 + (160 - 80) * t1;
-        const ro = 80 + (160 - 80) * t2;
-
-        // Цвет зависит от позиции (Cassini division и др.)
-        let color;
-        const bandCenter = (t1 + t2) / 2;
-        if (bandCenter > 0.3 && bandCenter < 0.35) {
-          color = 'rgba(60, 45, 20, 0.15)'; // Cassini division — тёмная щель
-        } else if (bandCenter > 0.6 && bandCenter < 0.63) {
-          color = 'rgba(60, 45, 20, 0.2)'; // Encke gap
+      // Полосы
+      for (let i = 0; i < 20; i++) {
+        const y = py - r + (2 * r / 20) * i;
+        const h = 2 * r / 20;
+        const bright = Math.sin(i * 0.6 + 1) * 0.5 + 0.5;
+        const alpha = 0.08 + bright * 0.12;
+        if (i % 3 === 0) {
+          ctx.fillStyle = `rgba(139, 105, 20, ${alpha})`;
+        } else if (i % 3 === 1) {
+          ctx.fillStyle = `rgba(255, 193, 7, ${alpha * 0.7})`;
         } else {
-          const bright = 0.5 + Math.sin(bandCenter * 20) * 0.3;
-          const r2 = Math.floor(180 + bright * 50);
-          const g = Math.floor(150 + bright * 40);
-          const b = Math.floor(60 + bright * 30);
-          color = `rgba(${r2}, ${g}, ${b}, ${0.5 + bright * 0.3})`;
+          ctx.fillStyle = `rgba(255, 248, 225, ${alpha * 0.5})`;
         }
+        ctx.fillRect(px - r, y, r * 2, h);
+      }
 
+      // Освещение
+      const specGrad = ctx.createRadialGradient(
+        px - r * 0.35, py - r * 0.35, 0,
+        px - r * 0.35, py - r * 0.35, r * 0.5
+      );
+      specGrad.addColorStop(0, 'rgba(255, 255, 240, 0.5)');
+      specGrad.addColorStop(0.6, 'rgba(255, 240, 200, 0.15)');
+      specGrad.addColorStop(1, 'rgba(255, 240, 200, 0)');
+      ctx.fillStyle = specGrad;
+      ctx.fillRect(px - r, py - r, r * 2, r * 2);
+
+      // Тень
+      const shadowGrad = ctx.createRadialGradient(
+        px + r * 0.4, py + r * 0.4, 0,
+        px + r * 0.4, py + r * 0.4, r * 0.7
+      );
+      shadowGrad.addColorStop(0, 'rgba(30, 20, 5, 0.4)');
+      shadowGrad.addColorStop(1, 'rgba(30, 20, 5, 0)');
+      ctx.fillStyle = shadowGrad;
+      ctx.fillRect(px - r, py - r, r * 2, r * 2);
+
+      // Контур
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(255, 215, 0, 0.4)';
+      ctx.lineWidth = 1.5 * scale;
+      ctx.stroke();
+
+      ctx.restore();
+    }
+
+    function drawVolumetricRings(frontHalf) {
+      const startAngle = frontHalf ? 0 : Math.PI;
+      const endAngle = frontHalf ? Math.PI : Math.PI * 2;
+      const steps = 120;
+
+      // Рисуем кольцо сегментами
+      for (let i = 0; i < steps; i++) {
+        const a1 = startAngle + (endAngle - startAngle) * i / steps;
+        const a2 = startAngle + (endAngle - startAngle) * (i + 1) / steps;
+        const midAngle = (a1 + a2) / 2;
+
+        // Рисуем кольцевой сегмент
         ctx.beginPath();
-        ctx.arc(cx, cy, ro, a1, a2);
-        ctx.arc(cx, cy, ri, a2, a1, true);
+        ctx.arc(cx, cy, 200 * scale, a1, a2);
+        ctx.arc(cx, cy, 90 * scale, a2, a1, true);
         ctx.closePath();
-        ctx.fillStyle = color;
+
+        // Градиент по углу кольца
+        const bright = Math.cos(midAngle) * 0.3 + 0.7;
+        const r2 = Math.floor(210 * bright);
+        const g = Math.floor(180 * bright);
+        const b = Math.floor(60 * bright);
+        const alpha = (0.4 + bright * 0.35) * (Math.sin(midAngle) > 0 ? 1 : 0.6);
+        ctx.fillStyle = `rgba(${r2}, ${g}, ${b}, ${alpha})`;
         ctx.fill();
+      }
+
+      // Cassini Division
+      const cassiniStart = Math.PI * 0.35;
+      const cassiniEnd = Math.PI * 0.45;
+      if (frontHalf) {
+        for (let i = 0; i < steps; i++) {
+          const a1 = cassiniStart + (cassiniEnd - cassiniStart) * i / steps;
+          const a2 = cassiniStart + (cassiniEnd - cassiniStart) * (i + 1) / steps;
+          ctx.beginPath();
+          ctx.arc(cx, cy, 165 * scale, a1, a2);
+          ctx.arc(cx, cy, 150 * scale, a2, a1, true);
+          ctx.closePath();
+          ctx.fillStyle = 'rgba(10, 10, 10, 0.7)';
+          ctx.fill();
+        }
+      } else {
+        for (let i = 0; i < steps; i++) {
+          const a1 = Math.PI + cassiniStart + (cassiniEnd - cassiniStart) * i / steps;
+          const a2 = Math.PI + cassiniStart + (cassiniEnd - cassiniStart) * (i + 1) / steps;
+          ctx.beginPath();
+          ctx.arc(cx, cy, 165 * scale, a1, a2);
+          ctx.arc(cx, cy, 150 * scale, a2, a1, true);
+          ctx.closePath();
+          ctx.fillStyle = 'rgba(10, 10, 10, 0.7)';
+          ctx.fill();
+        }
       }
     }
-  }
 
-  function drawRingParticlesHalf(front) {
-    ringParticles.forEach(p => {
-      p.angle += p.speed;
-      const x = cx + Math.cos(p.angle) * p.radius;
-      const y = cy + Math.sin(p.angle) * p.radius * Math.sin(tilt);
+    function animate() {
+      requestAnimationFrame(animate);
+      time += 1;
 
-      // Определяем, перед кольцом или за
-      const isFront = Math.sin(p.angle) > 0;
-      if (front && !isFront) return;
-      if (!front && isFront) return;
+      ctx.clearRect(0, 0, w, h);
 
-      // Тень для частиц за планетой
-      if (!front) {
-        ctx.globalAlpha = p.alpha * 0.5;
-      } else {
-        ctx.globalAlpha = p.alpha;
-      }
-
-      ctx.beginPath();
-      ctx.arc(x, y, p.size, 0, Math.PI * 2);
-      ctx.fillStyle = p.color;
-      ctx.fill();
-
-      // Свечение частицы
-      if (p.size > 2) {
+      // Фон звёзды
+      bgStars.forEach(s => {
+        const a = 0.3 + Math.sin(time * s.twinkleSpeed + s.twinkleOffset) * 0.5;
         ctx.beginPath();
-        ctx.arc(x, y, p.size * 2, 0, Math.PI * 2);
-        ctx.fillStyle = p.color.replace(')', ', 0.15)').replace('rgb', 'rgba').replace('#', '');
+        ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.1, a)})`;
         ctx.fill();
-      }
-    });
-    ctx.globalAlpha = 1;
-  }
+      });
 
-  function animate() {
-    requestAnimationFrame(animate);
-    time += 1;
+      // Наклон колец
+      const tilt = 0.35;
 
-    const cw = wrap.clientWidth;
-    const ch = wrap.clientHeight;
+      // === ЗАДНЕЕ КОЛЬЦО (за планетой) ===
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(1, tilt);
+      ctx.translate(-cx, -cy);
+      drawVolumetricRings(false);
+      ctx.restore();
 
-    // Тёмный фон секции (совпадает с CSS)
-    ctx.fillStyle = '#0a0a0a';
-    ctx.fillRect(0, 0, cw, ch);
+      // === ЗАДНИЕ ЧАСТИЦЫ ===
+      ringParticles.forEach(p => {
+        p.angle += p.speed;
+        const x = cx + Math.cos(p.angle) * p.radius * scale;
+        const y = cy + Math.sin(p.angle) * p.radius * scale * tilt + p.yOffset;
 
-    // Фоновые звёзды
-    bgStars.forEach(s => {
-      const a = 0.3 + Math.sin(time * s.twinkleSpeed + s.twinkleOffset) * 0.5;
+        const isFront = Math.sin(p.angle) > 0;
+        if (isFront) return;
+
+        ctx.beginPath();
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha * 0.6;
+        ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+
+      // === ПЛАНЕТА ===
+      const planetR = 80 * scale;
+      drawPlanet(cx, cy, planetR);
+
+      // === ПЕРЕДНЕЕ КОЛЬЦО (перед планетой) ===
+      ctx.save();
+      ctx.translate(cx, cy);
+      ctx.scale(1, tilt);
+      ctx.translate(-cx, -cy);
+      drawVolumetricRings(true);
+      ctx.restore();
+
+      // === ПЕРЕДНИЕ ЧАСТИЦЫ ===
+      ringParticles.forEach(p => {
+        p.angle += p.speed;
+        const x = cx + Math.cos(p.angle) * p.radius * scale;
+        const y = cy + Math.sin(p.angle) * p.radius * scale * tilt + p.yOffset;
+
+        const isFront = Math.sin(p.angle) > 0;
+        if (!isFront) return;
+
+        ctx.beginPath();
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        ctx.fillStyle = p.color;
+        ctx.globalAlpha = p.alpha;
+        ctx.fill();
+
+        // Glow
+        if (p.size > 1.5) {
+          ctx.globalAlpha = 0.1;
+          ctx.beginPath();
+          ctx.arc(x, y, p.size * 2.5, 0, Math.PI * 2);
+          ctx.fillStyle = p.color;
+          ctx.fill();
+        }
+      });
+      ctx.globalAlpha = 1;
+
+      // Атмосферное свечение
+      const atmGrad = ctx.createRadialGradient(cx, cy, planetR * 0.9, cx, cy, planetR * 1.5);
+      atmGrad.addColorStop(0, 'rgba(255, 215, 0, 0.15)');
+      atmGrad.addColorStop(0.5, 'rgba(255, 193, 7, 0.05)');
+      atmGrad.addColorStop(1, 'rgba(255, 193, 7, 0)');
       ctx.beginPath();
-      ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.1, a)})`;
+      ctx.arc(cx, cy, planetR * 1.5, 0, Math.PI * 2);
+      ctx.fillStyle = atmGrad;
       ctx.fill();
-    });
 
-    // Планета — УВЕЛИЧИЛ до 35%!
-    const planetR = Math.min(cw, ch) * 0.35;
+      // Свечение кольца
+      const ringGlow = ctx.createRadialGradient(cx, cy, 90 * scale, cx, cy, 210 * scale);
+      ringGlow.addColorStop(0, 'rgba(255, 200, 50, 0.05)');
+      ringGlow.addColorStop(0.7, 'rgba(255, 180, 30, 0.02)');
+      ringGlow.addColorStop(1, 'rgba(255, 160, 0, 0)');
+      ctx.beginPath();
+      ctx.arc(cx, cy, 210 * scale, 0, Math.PI * 2);
+      ctx.fillStyle = ringGlow;
+      ctx.fill();
+    }
 
-    // === BACK RINGS (за планетой) ===
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(tilt);
-    ctx.translate(-cx, -cy);
-
-    drawRingHalf(false, -Math.PI, 0);
-    ctx.restore();
-
-    // Частицы задней половины
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(tilt);
-    ctx.translate(-cx, -cy);
-    drawRingParticlesHalf(false);
-    ctx.restore();
-
-    // === ПЛАНЕТА ===
-    drawPlanet(cx, cy, planetR);
-
-    // === FRONT RINGS (перед планетой) ===
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(tilt);
-    ctx.translate(-cx, -cy);
-
-    drawRingHalf(true, 0, Math.PI);
-    ctx.restore();
-
-    // Частицы передней половины
-    ctx.save();
-    ctx.translate(cx, cy);
-    ctx.rotate(tilt);
-    ctx.translate(-cx, -cy);
-    drawRingParticlesHalf(true);
-    ctx.restore();
-
-    // Атмосферное свечение вокруг планеты
-    const glowR = planetR * 1.4;
-    const glowGrad = ctx.createRadialGradient(cx, cy, planetR * 0.8, cx, cy, glowR);
-    glowGrad.addColorStop(0, 'rgba(232, 184, 90, 0.2)');
-    glowGrad.addColorStop(0.5, 'rgba(232, 184, 90, 0.08)');
-    glowGrad.addColorStop(1, 'rgba(232, 184, 90, 0)');
-    ctx.beginPath();
-    ctx.arc(cx, cy, glowR, 0, Math.PI * 2);
-    ctx.fillStyle = glowGrad;
-    ctx.fill();
-
-    // Внутреннее свечение кольца
-    const ringGlowGrad = ctx.createRadialGradient(cx, cy, 70, cx, cy, 170);
-    ringGlowGrad.addColorStop(0, 'rgba(255, 200, 80, 0.05)');
-    ringGlowGrad.addColorStop(0.5, 'rgba(255, 180, 60, 0.03)');
-    ringGlowGrad.addColorStop(1, 'rgba(255, 150, 30, 0)');
-    ctx.beginPath();
-    ctx.arc(cx, cy, 170, 0, Math.PI * 2);
-    ctx.fillStyle = ringGlowGrad;
-    ctx.fill();
+    animate();
   }
-
-  animate();
 })();
 </script>
 </body>
