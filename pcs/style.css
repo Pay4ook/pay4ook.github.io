@@ -295,7 +295,7 @@ img { max-width: 100%; display: block; }
   align-items: center;
   justify-content: center;
   overflow: visible;
-  background: transparent;
+  background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a1a 70%);
   border-top: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
   padding: 60px 0;
@@ -308,6 +308,7 @@ img { max-width: 100%; display: block; }
   max-width: 1200px;
   width: 100%;
   position: relative;
+  z-index: 100;
   flex-wrap: wrap;
 }
 .saturn-canvas-wrap {
