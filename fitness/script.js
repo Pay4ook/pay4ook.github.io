@@ -1,4 +1,4 @@
-﻿﻿﻿// Mobile menu
+// Mobile menu
 const burger = document.getElementById('burger');
 const mnav = document.getElementById('mnav');
 const mnavOverlay = document.getElementById('mnavOverlay');

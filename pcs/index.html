@@ -1112,7 +1112,7 @@ function copyPromo(btn) {
 }
 
 // ========================
-// SATURN — Simple & Bright
+// SATURN — ЧЁТКИЙ И ОБЪЁМНЫЙ
 // ========================
 (function() {
   setTimeout(initSaturn, 300);
@@ -1135,24 +1135,15 @@ function copyPromo(btn) {
     const cx = w / 2;
     const cy = h / 2;
 
-    // Stars
+    // Звёзды фона
     const stars = [];
-    for (let i = 0; i < 200; i++) {
-      stars.push({ x: Math.random() * w, y: Math.random() * h, r: Math.random() * 1.2, a: Math.random() });
-    }
-
-    // Ring particles
-    const particles = [];
-    const colors = ['#FFD700', '#FFC107', '#FFE082', '#FFF8E1', '#FFFFFF'];
-    for (let i = 0; i < 800; i++) {
-      const angle = Math.random() * Math.PI * 2;
-      const radius = 100 + Math.random() * 90;
-      particles.push({
-        angle, radius,
-        speed: (0.002 + Math.random() * 0.003) * (Math.random() > 0.5 ? 1 : -1),
-        size: 0.5 + Math.random() * 2,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        alpha: 0.4 + Math.random() * 0.6
+    for (let i = 0; i < 150; i++) {
+      stars.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 1.5 + 0.5,
+        a: Math.random(),
+        speed: 0.01 + Math.random() * 0.02
       });
     }
 
@@ -1164,144 +1155,228 @@ function copyPromo(btn) {
 
       ctx.clearRect(0, 0, w, h);
 
-      // Stars
+      // Фон — тёмный космос
+      const bgGrad = ctx.createRadialGradient(cx, cy, 50, cx, cy, 350);
+      bgGrad.addColorStop(0, '#1a1a2e');
+      bgGrad.addColorStop(0.5, '#0f0f1a');
+      bgGrad.addColorStop(1, '#050510');
+      ctx.fillStyle = bgGrad;
+      ctx.fillRect(0, 0, w, h);
+
+      // Звёзды мерцают
       for (const s of stars) {
-        const a = 0.3 + Math.sin(t * 0.02 + s.a * 10) * 0.4;
+        const a = 0.4 + Math.sin(t * s.speed + s.a * 10) * 0.4;
         ctx.beginPath();
         ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255,255,255,${Math.max(0.1, a)})`;
+        ctx.fillStyle = `rgba(255,255,255,${a})`;
         ctx.fill();
       }
 
-      const planetR = 70;
-      const tilt = 0.3;
+      const planetR = 75;
+      const tilt = 0.35; // Наклон колец
 
-      // ===== BACK RINGS =====
+      // ===== ЗАДНИЕ КОЛЬЦА =====
       ctx.save();
       ctx.translate(cx, cy);
       ctx.scale(1, tilt);
       ctx.translate(-cx, -cy);
 
-      // Ring bands
-      for (let band = 0; band < 5; band++) {
-        const r1 = 100 + band * 18;
-        const r2 = r1 + 18;
-        const bright = 0.5 + Math.sin(band * 1.2) * 0.3;
+      // Внешнее кольцо — золотое
+      for (let i = 0; i < 3; i++) {
+        const r1 = 130 + i * 12;
+        const r2 = r1 + 12;
+        const bright = 0.7 - i * 0.15;
+        const grad = ctx.createRadialGradient(cx, cy, r1, cx, cy, r2);
+        grad.addColorStop(0, `rgba(255,215,0,${bright * 0.6})`);
+        grad.addColorStop(0.5, `rgba(255,180,0,${bright})`);
+        grad.addColorStop(1, `rgba(200,140,0,${bright * 0.5})`);
         ctx.beginPath();
         ctx.arc(cx, cy, r2, Math.PI, Math.PI * 2);
         ctx.arc(cx, cy, r1, Math.PI * 2, Math.PI, true);
         ctx.closePath();
-        ctx.fillStyle = `rgba(${200 + Math.floor(bright * 55)}, ${160 + Math.floor(bright * 40)}, ${60 + Math.floor(bright * 30)}, ${0.5 + bright * 0.3})`;
+        ctx.fillStyle = grad;
         ctx.fill();
       }
-      // Cassini gap
+
+      // Среднее кольцо — яркое
+      for (let i = 0; i < 2; i++) {
+        const r1 = 105 + i * 10;
+        const r2 = r1 + 10;
+        const grad = ctx.createRadialGradient(cx, cy, r1, cx, cy, r2);
+        grad.addColorStop(0, 'rgba(255,225,50,0.5)');
+        grad.addColorStop(0.5, 'rgba(255,200,30,0.9)');
+        grad.addColorStop(1, 'rgba(200,160,20,0.4)');
+        ctx.beginPath();
+        ctx.arc(cx, cy, r2, Math.PI, Math.PI * 2);
+        ctx.arc(cx, cy, r1, Math.PI * 2, Math.PI, true);
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      // Тёмная щель
       ctx.beginPath();
-      ctx.arc(cx, cy, 145, Math.PI, Math.PI * 2);
-      ctx.arc(cx, cy, 137, Math.PI * 2, Math.PI, true);
+      ctx.arc(cx, cy, 128, Math.PI, Math.PI * 2);
+      ctx.arc(cx, cy, 122, Math.PI * 2, Math.PI, true);
       ctx.closePath();
-      ctx.fillStyle = 'rgba(10,10,10,0.8)';
+      ctx.fillStyle = 'rgba(10,10,16,0.9)';
       ctx.fill();
 
       ctx.restore();
 
-      // ===== BACK PARTICLES =====
-      for (const p of particles) {
-        p.angle += p.speed;
-        const x = cx + Math.cos(p.angle) * p.radius;
-        const y = cy + Math.sin(p.angle) * p.radius * tilt;
-        if (Math.sin(p.angle) > 0) continue;
-        ctx.beginPath();
-        ctx.arc(x, y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.alpha * 0.5;
-        ctx.fill();
-      }
-      ctx.globalAlpha = 1;
-
-      // ===== PLANET =====
+      // ===== ПЛАНЕТА =====
       ctx.save();
       ctx.beginPath();
       ctx.arc(cx, cy, planetR, 0, Math.PI * 2);
       ctx.clip();
 
-      const grad = ctx.createRadialGradient(cx - planetR * 0.3, cy - planetR * 0.3, planetR * 0.1, cx, cy, planetR);
-      grad.addColorStop(0, '#FFF8E1');
-      grad.addColorStop(0.3, '#FFE082');
-      grad.addColorStop(0.6, '#D4941C');
-      grad.addColorStop(1, '#4A3510');
-      ctx.fillStyle = grad;
+      // Градиент планеты
+      const planetGrad = ctx.createRadialGradient(
+        cx - planetR * 0.35, cy - planetR * 0.35, planetR * 0.1,
+        cx, cy, planetR
+      );
+      planetGrad.addColorStop(0, '#fff8e1');
+      planetGrad.addColorStop(0.2, '#ffe082');
+      planetGrad.addColorStop(0.4, '#f0c040');
+      planetGrad.addColorStop(0.6, '#d4941c');
+      planetGrad.addColorStop(0.8, '#8b6914');
+      planetGrad.addColorStop(1, '#3d2e10');
+      ctx.fillStyle = planetGrad;
       ctx.fillRect(cx - planetR, cy - planetR, planetR * 2, planetR * 2);
 
-      // Bands
-      for (let i = 0; i < 15; i++) {
-        const by = cy - planetR + (2 * planetR / 15) * i;
-        const bh = 2 * planetR / 15;
-        ctx.fillStyle = `rgba(${140 + i * 5}, ${100 + i * 3}, ${20 + i * 2}, 0.1)`;
-        ctx.fillRect(cx - planetR, by, planetR * 2, bh);
+      // Полосы на планете
+      for (let i = 0; i < 12; i++) {
+        const y = cy - planetR + (2 * planetR / 12) * i;
+        const h = 2 * planetR / 12;
+        ctx.fillStyle = `rgba(${140 + i * 5}, ${100 + i * 3}, ${20 + i * 2}, 0.15)`;
+        ctx.fillRect(cx - planetR, y, planetR * 2, h);
       }
 
-      // Highlight
-      const hl = ctx.createRadialGradient(cx - planetR * 0.35, cy - planetR * 0.35, 0, cx - planetR * 0.35, cy - planetR * 0.35, planetR * 0.5);
-      hl.addColorStop(0, 'rgba(255,255,240,0.5)');
-      hl.addColorStop(1, 'rgba(255,240,200,0)');
-      ctx.fillStyle = hl;
+      // Освещение — блик
+      const hlGrad = ctx.createRadialGradient(
+        cx - planetR * 0.4, cy - planetR * 0.4, 0,
+        cx - planetR * 0.4, cy - planetR * 0.4, planetR * 0.6
+      );
+      hlGrad.addColorStop(0, 'rgba(255,255,240,0.6)');
+      hlGrad.addColorStop(0.5, 'rgba(255,240,200,0.2)');
+      hlGrad.addColorStop(1, 'rgba(255,240,200,0)');
+      ctx.fillStyle = hlGrad;
+      ctx.fillRect(cx - planetR, cy - planetR, planetR * 2, planetR * 2);
+
+      // Тень
+      const shadowGrad = ctx.createRadialGradient(
+        cx + planetR * 0.5, cy + planetR * 0.5, 0,
+        cx + planetR * 0.5, cy + planetR * 0.5, planetR * 0.8
+      );
+      shadowGrad.addColorStop(0, 'rgba(20,15,5,0.5)');
+      shadowGrad.addColorStop(1, 'rgba(20,15,5,0)');
+      ctx.fillStyle = shadowGrad;
       ctx.fillRect(cx - planetR, cy - planetR, planetR * 2, planetR * 2);
 
       ctx.restore();
 
-      // ===== FRONT RINGS =====
+      // ===== ПЕРЕДНИЕ КОЛЬЦА =====
       ctx.save();
       ctx.translate(cx, cy);
       ctx.scale(1, tilt);
       ctx.translate(-cx, -cy);
 
-      for (let band = 0; band < 5; band++) {
-        const r1 = 100 + band * 18;
-        const r2 = r1 + 18;
-        const bright = 0.5 + Math.sin(band * 1.2) * 0.3;
+      // Внешнее кольцо — золотое (передняя часть)
+      for (let i = 0; i < 3; i++) {
+        const r1 = 130 + i * 12;
+        const r2 = r1 + 12;
+        const bright = 0.7 - i * 0.15;
+        const grad = ctx.createRadialGradient(cx, cy, r1, cx, cy, r2);
+        grad.addColorStop(0, `rgba(255,215,0,${bright * 0.7})`);
+        grad.addColorStop(0.5, `rgba(255,180,0,${bright})`);
+        grad.addColorStop(1, `rgba(200,140,0,${bright * 0.6})`);
         ctx.beginPath();
         ctx.arc(cx, cy, r2, 0, Math.PI);
         ctx.arc(cx, cy, r1, Math.PI, 0, true);
         ctx.closePath();
-        ctx.fillStyle = `rgba(${200 + Math.floor(bright * 55)}, ${160 + Math.floor(bright * 40)}, ${60 + Math.floor(bright * 30)}, ${0.5 + bright * 0.3})`;
+        ctx.fillStyle = grad;
         ctx.fill();
       }
-      // Cassini gap
+
+      // Среднее кольцо — яркое (передняя часть)
+      for (let i = 0; i < 2; i++) {
+        const r1 = 105 + i * 10;
+        const r2 = r1 + 10;
+        const grad = ctx.createRadialGradient(cx, cy, r1, cx, cy, r2);
+        grad.addColorStop(0, 'rgba(255,225,50,0.6)');
+        grad.addColorStop(0.5, 'rgba(255,200,30,1)');
+        grad.addColorStop(1, 'rgba(200,160,20,0.5)');
+        ctx.beginPath();
+        ctx.arc(cx, cy, r2, 0, Math.PI);
+        ctx.arc(cx, cy, r1, Math.PI, 0, true);
+        ctx.closePath();
+        ctx.fillStyle = grad;
+        ctx.fill();
+      }
+
+      // Тёмная щель (передняя часть)
       ctx.beginPath();
-      ctx.arc(cx, cy, 145, 0, Math.PI);
-      ctx.arc(cx, cy, 137, Math.PI, 0, true);
+      ctx.arc(cx, cy, 128, 0, Math.PI);
+      ctx.arc(cx, cy, 122, Math.PI, 0, true);
       ctx.closePath();
-      ctx.fillStyle = 'rgba(10,10,10,0.8)';
+      ctx.fillStyle = 'rgba(10,10,16,0.9)';
       ctx.fill();
 
       ctx.restore();
 
-      // ===== FRONT PARTICLES =====
-      for (const p of particles) {
-        const x = cx + Math.cos(p.angle) * p.radius;
-        const y = cy + Math.sin(p.angle) * p.radius * tilt;
-        if (Math.sin(p.angle) <= 0) continue;
+      // ===== ЧАСТИЦЫ КОЛЕЦ =====
+      // 600 частиц золотых
+      for (let i = 0; i < 600; i++) {
+        const angle = (i / 600) * Math.PI * 2 + t * 0.002;
+        const radius = 110 + Math.sin(i * 0.5) * 30;
+        const x = cx + Math.cos(angle) * radius;
+        const y = cy + Math.sin(angle) * radius * tilt;
+
+        // Определяем перед или за
+        const isFront = Math.sin(angle) > 0;
+        const alpha = isFront ? 0.8 : 0.4;
+
+        // Цвет — золотой/янтарный
+        const colorIdx = Math.floor(Math.random() * 3);
+        const colors = [
+          'rgba(255,215,0,',   // золото
+          'rgba(255,180,0,',   // янтарь
+          'rgba(255,240,100,'  // светлое золото
+        ];
+        const color = colors[colorIdx];
+
         ctx.beginPath();
-        ctx.arc(x, y, p.size, 0, Math.PI * 2);
-        ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.alpha;
+        ctx.arc(x, y, 1 + Math.random() * 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = `${color}${alpha})`;
         ctx.fill();
-        if (p.size > 1.5) {
-          ctx.globalAlpha = 0.1;
+
+        // Glow для ярких частиц
+        if (i % 5 === 0) {
           ctx.beginPath();
-          ctx.arc(x, y, p.size * 2, 0, Math.PI * 2);
+          ctx.arc(x, y, 3, 0, Math.PI * 2);
+          ctx.fillStyle = `${color}${alpha * 0.3})`;
           ctx.fill();
         }
       }
-      ctx.globalAlpha = 1;
 
-      // Glow
-      const glow = ctx.createRadialGradient(cx, cy, planetR * 0.9, cx, cy, planetR * 1.8);
-      glow.addColorStop(0, 'rgba(255,215,0,0.12)');
-      glow.addColorStop(1, 'rgba(255,215,0,0)');
+      // ===== ОБЪЁМ И СВЕЧЕНИЕ =====
+      // Свечение вокруг планеты
+      const glowGrad = ctx.createRadialGradient(cx, cy, planetR * 0.9, cx, cy, planetR * 1.6);
+      glowGrad.addColorStop(0, 'rgba(255,200,50,0.15)');
+      glowGrad.addColorStop(0.5, 'rgba(255,180,30,0.05)');
+      glowGrad.addColorStop(1, 'rgba(255,160,0,0)');
       ctx.beginPath();
-      ctx.arc(cx, cy, planetR * 1.8, 0, Math.PI * 2);
-      ctx.fillStyle = glow;
+      ctx.arc(cx, cy, planetR * 1.6, 0, Math.PI * 2);
+      ctx.fillStyle = glowGrad;
+      ctx.fill();
+
+      // Свечение колец
+      const ringGlow = ctx.createRadialGradient(cx, cy, 100, cx, cy, 160);
+      ringGlow.addColorStop(0, 'rgba(255,200,50,0.05)');
+      ringGlow.addColorStop(1, 'rgba(255,180,0,0)');
+      ctx.beginPath();
+      ctx.arc(cx, cy, 160, 0, Math.PI * 2);
+      ctx.fillStyle = ringGlow;
       ctx.fill();
     }
 
